@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Фюл ⛽ Меп</string>
+    <string name="map">Карта</string>
+    <string name="settings">Налаштування</string>
+
+
+    <string name="all_retry">Retry</string>
+    <string name="all_loading">Loading data…</string>
+    <string name="error_server_api">Whoops, looks like something went wrong</string>
+    <string name="permission_required_title">For the application to work correctly, we need more permission</string>
+    <string name="permission_required_ok">Settings</string>
+    <string name="permission_permanently_denied_location_message">To show a fuel station? we need premission to use you location</string>
+</resources>
