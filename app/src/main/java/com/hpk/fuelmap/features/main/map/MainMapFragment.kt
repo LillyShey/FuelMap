@@ -1,4 +1,4 @@
-package com.hpk.fuelmap.features.main
+package com.hpk.fuelmap.features.main.map
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

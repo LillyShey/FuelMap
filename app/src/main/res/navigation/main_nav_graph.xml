@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/mainMapFragment"
-        android:name="com.hpk.fuelmap.features.main.MainMapFragment"
+        android:name="com.hpk.fuelmap.features.main.map.MainMapFragment"
         android:label="fragment_main_map"
         tools:layout="@layout/fragment_main_map" />
     <fragment
         android:id="@+id/mainSettingsFragment"
-        android:name="com.hpk.fuelmap.features.main.MainSettingsFragment"
+        android:name="com.hpk.fuelmap.features.main.settings.MainSettingsFragment"
         android:label="fragment_main_settings"
         tools:layout="@layout/fragment_main_settings" />
 </navigation>
