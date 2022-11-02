@@ -1,17 +1,94 @@
 package com.hpk.fuelmap.features.main.map
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.hpk.domain.models.common.Coordinates
 import com.hpk.fuelmap.R
+import com.hpk.fuelmap.common.extensions.requestAppPermission
+import com.hpk.fuelmap.common.extensions.setDefaultMapStyle
+import com.hpk.fuelmap.common.extensions.showPermissionRequiredDialog
+import com.hpk.fuelmap.common.ui.base.BaseFragment
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import splitties.toast.longToast
+import splitties.toast.toast
 
-class MainMapFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_main_map, container, false)
+
+class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
+    companion object {
+        private const val ZOOM_LEVEL = 16.0f
+    }
+
+    private val viewModel: MainMapVM by sharedViewModel()
+    private lateinit var googleMap: GoogleMap
+    private var isLocationApprove = false
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        checkLocationPermission()
+        initMap()
+        observerData()
+        viewModel.getCurrentLocation()
+    }
+
+    private fun observerData() {
+        observerCurrentLocation()
+        observeLocationError()
+    }
+
+    private fun checkLocationPermission() {
+        activity?.requestAppPermission {
+            permission(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) {
+                granted {
+                    isLocationApprove = true
+                }
+                denied {
+                    isLocationApprove = false
+                    if (it.isPermanentlyDenied) {
+                        activity?.showPermissionRequiredDialog(getString(R.string.permission_permanently_denied_location_message))
+                    } else {
+                        toast(R.string.permission_required_location_message)
+                    }
+                }
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun initMap() {
+        val supportMapFragment =
+            childFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment?
+        supportMapFragment?.getMapAsync {
+            with(it) {
+                googleMap = this
+                googleMap.setDefaultMapStyle(isLocationApprove)
+            }
+        }
+    }
+
+    private fun observerCurrentLocation() {
+        viewModel.currentLocation.observe(viewLifecycleOwner) {
+            if (it != null) {
+                moveCameraCurrentLocation(it)
+            }
+        }
+    }
+
+    private fun observeLocationError() {
+        viewModel.noAnyLocationError.observe(viewLifecycleOwner) {
+            longToast(R.string.all_no_location_providers)
+        }
+    }
+
+    private fun moveCameraCurrentLocation(coordinates: Coordinates) {
+        val position = LatLng(coordinates.latitude, coordinates.longitude)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_LEVEL))
     }
 }

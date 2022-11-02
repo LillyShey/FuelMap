@@ -9,5 +9,10 @@
     <string name="error_server_api">Whoops, looks like something went wrong</string>
     <string name="permission_required_title">For the application to work correctly, we need more permission</string>
     <string name="permission_required_ok">Settings</string>
-    <string name="permission_permanently_denied_location_message">To show a fuel station? we need premission to use you location</string>
+    <string name="settings_card_title">Оберіть тип пального для відображення на карті</string>
+    <string name="permission_permanently_denied_location">Denied your location permission</string>
+    <string name="permission_permanently_denied_location_message">To select your location, we need permission to use the your GPS. Go to settings for permissions.</string>
+    <string name="permission_required_location_message">For correct operation application  we need permission to obtain a location</string>
+    <string name="all_no_location_providers">Location detection is disabled. Please enable it in the settings</string>
+
 </resources>

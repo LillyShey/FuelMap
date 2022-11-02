@@ -7,17 +7,19 @@
 
     <TextView
         android:id="@+id/fuelNameTV"
-        android:layout_width="wrap_content"
+        style="@style/Text"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:gravity="start"
         android:text="@string/app_name"
-        app:layout_constraintStart_toStartOf="parent"
-        style="@style/Text"/>
+        app:layout_constraintEnd_toStartOf="@id/fuelSwitch"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/fuelSwitch"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:theme="@style/Switch"/>
+        android:theme="@style/Switch"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

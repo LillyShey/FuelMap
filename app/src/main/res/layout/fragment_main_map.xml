@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".features.main.map.MainMapFragment">
 
-    <TextView
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/google_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Map"
-        android:gravity="center"/>
-
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,5 +53,8 @@ versions.timberKtVersion = '1.5.1'
 versions.navigationVersion = '2.5.2'
 versions.splittiesVersion = "3.0.0-rc01"
 versions.dexterVersion = "6.2.3"
+versions.googlePlayServicesMapsVersion = "18.1.0"
+versions.googlePlayServicesLocationVersion = "21.0.0"
+versions.mapUtilsVersion = "2.3.0"
 ext.versions = versions
 //endregion ---------------------------------------------------------

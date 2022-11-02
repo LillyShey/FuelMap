@@ -25,15 +25,18 @@ class MainSettingsVM(
                     fuelTypes.value = it
                 },
                 onError = {
-                    Timber.e(it)
                     fuelTypes.value = null
-                    errorMessage.value = it.message
+                    timber.log.Timber.e(it)
+                    errorMessage.value = it.apiError?.toString()
+                },
+                onConnectionError = {
+                    timber.log.Timber.e(it)
                     onConnectionError { getAllFuelsTypes() }
                 },
                 onUnexpectedError = {
-
                     fuelTypes.value = null
-                    errorMessage.value = it.message
+                    timber.log.Timber.e(it)
+                    errorMessage.value = it.localizedMessage
                 },
                 onLoading = {
                     isLoading.value = it

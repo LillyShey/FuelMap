@@ -1,29 +1,37 @@
 package com.hpk.fuelmap.features.main.settings
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hpk.domain.models.fuel.FuelType
-import com.hpk.fuelmap.R
+import com.hpk.fuelmap.databinding.ListItemFuelTypesBinding
 
-class FuelTypesAdapter(private val fuelTypesList: List<FuelType>?) :
-    RecyclerView.Adapter<FuelTypesAdapter.ViewHolder>() {
+class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.ViewHolder>() {
+    var fuelTypesList: List<FuelType>? = null
+        get() = field
+        set(value) {
+            field = value
+        }
 
+    inner class ViewHolder(val binding: ListItemFuelTypesBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item_fuel_types, parent, false)
-        return ViewHolder(view)
+        val binding = ListItemFuelTypesBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val fuel: FuelType
         fuelTypesList?.let {
-            fuel = fuelTypesList[position]
-            holder.fuelName.text = fuel.name
+            with(holder) {
+                with(it[position]) {
+                    binding.fuelNameTV.text = this.name
+                    binding.fuelSwitch.isChecked = this.isChosen ?: false
+                }
+            }
         }
     }
 
@@ -31,10 +39,5 @@ class FuelTypesAdapter(private val fuelTypesList: List<FuelType>?) :
         var size = 0
         fuelTypesList?.let { size = it.size }
         return size
-    }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val fuelName: TextView = itemView.findViewById(R.id.fuelNameTV)
-        val fuelSwitch: SwitchCompat = itemView.findViewById(R.id.fuelSwitch)
     }
 }

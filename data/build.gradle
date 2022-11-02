@@ -77,6 +77,8 @@ dependencies {
     api "com.squareup.okhttp3:okhttp:$versions.okHttpVersion"
     api "com.squareup.okhttp3:logging-interceptor:$versions.okHttpVersion"
     api "com.google.code.gson:gson:$versions.gsonVersion"
+    implementation "com.google.android.gms:play-services-location:$versions.googlePlayServicesLocationVersion"
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
