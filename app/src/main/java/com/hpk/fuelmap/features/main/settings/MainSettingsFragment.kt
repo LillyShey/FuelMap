@@ -9,11 +9,11 @@ import com.hpk.fuelmap.common.ui.base.BaseFragment
 import com.hpk.fuelmap.databinding.FragmentMainSettingsBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class MainSettingsFragment: BaseFragment(R.layout.fragment_main_settings) {
+class MainSettingsFragment : BaseFragment(R.layout.fragment_main_settings) {
 
     private val binding: FragmentMainSettingsBinding by viewBinding(FragmentMainSettingsBinding::bind)
     private val sharedViewModel: MainSettingsVM by sharedViewModel()
-    private val listAdapter= FuelTypesAdapter()
+    private val listAdapter = FuelTypesAdapter()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
@@ -26,14 +26,15 @@ class MainSettingsFragment: BaseFragment(R.layout.fragment_main_settings) {
         super.onStart()
         observeOnFuelTypesListChange()
     }
-    private fun initViews(){
+
+    private fun initViews() {
         binding.fuelTypesRecycler.layoutManager = LinearLayoutManager(context)
         binding.fuelTypesRecycler.adapter = listAdapter
     }
 
-    private fun observeOnFuelTypesListChange(){
-        sharedViewModel.fuelTypes.observe(viewLifecycleOwner){
-            listAdapter.fuelTypesList=it
+    private fun observeOnFuelTypesListChange() {
+        sharedViewModel.fuelTypes.observe(viewLifecycleOwner) { fuelTypeList ->
+            listAdapter.fuelTypesList = fuelTypeList
         }
     }
 }

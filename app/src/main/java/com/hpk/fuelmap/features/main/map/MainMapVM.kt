@@ -23,8 +23,8 @@ class MainMapVM(
                 onSuccess = {
                     currentLocation.value = it
                 },
-                onError = {
-                    errorMessage.value = it
+                onError = {errorMsg->
+                    errorMessage.value = errorMsg
                 },
                 onNoAnyLocationProvider = {
                     noAnyLocationError.call()

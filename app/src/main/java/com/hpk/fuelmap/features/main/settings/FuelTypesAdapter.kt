@@ -6,38 +6,34 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hpk.domain.models.fuel.FuelType
 import com.hpk.fuelmap.databinding.ListItemFuelTypesBinding
 
-class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.ViewHolder>() {
+class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHolder>() {
     var fuelTypesList: List<FuelType>? = null
         get() = field
         set(value) {
             field = value
         }
 
-    inner class ViewHolder(val binding: ListItemFuelTypesBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class FuelTypesViewHolder(val binding: ListItemFuelTypesBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun onBind(item: FuelType) {
+            binding.fuelNameTV.text = item.name
+            binding.fuelSwitch.isChecked = item.isChecked ?: false
+        }
+    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FuelTypesViewHolder {
         val binding = ListItemFuelTypesBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false)
-        return ViewHolder(binding)
+        return FuelTypesViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FuelTypesViewHolder, position: Int) {
         fuelTypesList?.let {
-            with(holder) {
-                with(it[position]) {
-                    binding.fuelNameTV.text = this.name
-                    binding.fuelSwitch.isChecked = this.isChosen ?: false
-                }
-            }
+            holder.onBind(it[position])
         }
     }
 
-    override fun getItemCount(): Int {
-        var size = 0
-        fuelTypesList?.let { size = it.size }
-        return size
-    }
+    override fun getItemCount() = fuelTypesList?.size ?: 0
 }

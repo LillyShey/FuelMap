@@ -29,8 +29,8 @@ class FuelTypeProvider(
         ).apply()
     }
 
-    fun getFuelTypesState(): Array<FuelType> = gson.fromJson(
+    fun getFuelTypesState(): List<FuelType> = gson.fromJson(
         sharedPreferences.getString(FUEL_TYPES_STATE, ArrayList<FuelType>().toString()),
         Array<FuelType>::class.java
-    )
+    ).toList()
 }

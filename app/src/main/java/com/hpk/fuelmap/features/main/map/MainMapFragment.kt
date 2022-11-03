@@ -35,6 +35,11 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         viewModel.getCurrentLocation()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCurrentLocation()
+    }
+
     private fun observerData() {
         observerCurrentLocation()
         observeLocationError()
@@ -63,12 +68,12 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
 
     @SuppressLint("MissingPermission")
     private fun initMap() {
-        val supportMapFragment =
-            childFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment?
-        supportMapFragment?.getMapAsync {
-            with(it) {
-                googleMap = this
-                googleMap.setDefaultMapStyle(isLocationApprove)
+        (childFragmentManager.findFragmentById(R.id.google_map) as? SupportMapFragment)?.let { supportMapFragment->
+            supportMapFragment.getMapAsync {
+                with(it) {
+                    googleMap = this
+                    googleMap.setDefaultMapStyle(isLocationApprove)
+                }
             }
         }
     }

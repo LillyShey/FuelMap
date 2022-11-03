@@ -14,7 +14,7 @@ class FuelTypeRepositoryImpl(
         try {
             //FIXME Change to get data from API
             var list = ArrayList<FuelType>()
-            if (fuelTypeProvider.getFuelTypesState().isEmpty()) {
+            if (fuelTypeProvider.getFuelTypesState().isNullOrEmpty()) {
 //                for (fuelType in fuelTypeService.getAllFuelTypes()) {
 //                    list.add(FuelTypeResponse.mapToDomain(fuelType))
 //                }
@@ -24,7 +24,7 @@ class FuelTypeRepositoryImpl(
                 list.add(FuelType("4", "Газ"))
                 fuelTypeProvider.saveFuelTypesState(list)
             } else {
-                list = fuelTypeProvider.getFuelTypesState() as ArrayList<FuelType>
+                list = fuelTypeProvider.getFuelTypesState().toList() as ArrayList<FuelType>
             }
             return list
         } catch (e: Throwable) {
