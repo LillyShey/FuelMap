@@ -1,6 +1,5 @@
 package com.hpk.fuelmap.features.main.map
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -13,51 +12,44 @@ import com.hpk.fuelmap.common.extensions.requestAppPermission
 import com.hpk.fuelmap.common.extensions.setDefaultMapStyle
 import com.hpk.fuelmap.common.extensions.showPermissionRequiredDialog
 import com.hpk.fuelmap.common.ui.base.BaseFragment
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import splitties.toast.longToast
 import splitties.toast.toast
-
 
 class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
     companion object {
         private const val ZOOM_LEVEL = 16.0f
     }
 
-    private val viewModel: MainMapVM by sharedViewModel()
+    private val viewModel: MainMapVM by viewModel()
     private lateinit var googleMap: GoogleMap
     private var isLocationApprove = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkLocationPermission()
         initMap()
-        observerData()
-        viewModel.getCurrentLocation()
+        checkLocationPermission()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getCurrentLocation()
-    }
-
-    private fun observerData() {
+    private fun observeData(){
         observerCurrentLocation()
         observeLocationError()
     }
 
     private fun checkLocationPermission() {
-        activity?.requestAppPermission {
+        requireContext().requestAppPermission {
             permission(
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
             ) {
                 granted {
                     isLocationApprove = true
+                    viewModel.getCurrentLocation()
                 }
                 denied {
                     isLocationApprove = false
                     if (it.isPermanentlyDenied) {
-                        activity?.showPermissionRequiredDialog(getString(R.string.permission_permanently_denied_location_message))
+                        requireContext().showPermissionRequiredDialog(getString(R.string.permission_permanently_denied_location_message))
                     } else {
                         toast(R.string.permission_required_location_message)
                     }
@@ -66,21 +58,21 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         }
     }
 
-    @SuppressLint("MissingPermission")
     private fun initMap() {
-        (childFragmentManager.findFragmentById(R.id.google_map) as? SupportMapFragment)?.let { supportMapFragment->
+        (childFragmentManager.findFragmentById(R.id.google_map) as? SupportMapFragment)?.let { supportMapFragment ->
             supportMapFragment.getMapAsync {
                 with(it) {
                     googleMap = this
                     googleMap.setDefaultMapStyle(isLocationApprove)
+                    observeData()
                 }
             }
         }
     }
 
     private fun observerCurrentLocation() {
-        viewModel.currentLocation.observe(viewLifecycleOwner) {
-            if (it != null) {
+        viewModel.currentLocation.observe(viewLifecycleOwner) { coordinates ->
+            coordinates?.let {
                 moveCameraCurrentLocation(it)
             }
         }

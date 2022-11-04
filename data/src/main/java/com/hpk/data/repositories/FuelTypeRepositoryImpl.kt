@@ -14,7 +14,7 @@ class FuelTypeRepositoryImpl(
         try {
             //FIXME Change to get data from API
             var list = ArrayList<FuelType>()
-            if (fuelTypeProvider.getFuelTypesState().isNullOrEmpty()) {
+            if (fuelTypeProvider.getFuelTypesState().isEmpty()) {
 //                for (fuelType in fuelTypeService.getAllFuelTypes()) {
 //                    list.add(FuelTypeResponse.mapToDomain(fuelType))
 //                }

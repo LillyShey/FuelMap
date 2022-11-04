@@ -22,18 +22,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity(R.layout.activity_main) {
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
-    private val settingsViewModel: MainSettingsVM by viewModel()
-    private val mapViewModel: MainMapVM by viewModel()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViews()
-        observeConnectionError(settingsViewModel.connectionError, binding.root) {
-            settingsViewModel.retry()
-        }
-        observeConnectionError(mapViewModel.connectionError, binding.root) {
-            settingsViewModel.retry()
-        }
     }
 
     private fun initViews() {

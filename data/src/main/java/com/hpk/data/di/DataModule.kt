@@ -2,19 +2,15 @@ package com.hpk.data.di
 
 import android.content.Context
 import android.location.LocationManager
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.hpk.data.BuildConfig
 import com.hpk.data.api.RestConst
-import com.hpk.data.providers.FuelTypeProvider
-import com.hpk.data.repositories.FuelTypeRepositoryImpl
-import com.hpk.data.repositories.LocationRepositoryImpl
-import com.hpk.data.services.FuelTypeService
-import com.hpk.domain.repositories.FuelTypeRepository
-import com.hpk.domain.repositories.LocationRepository
+import com.hpk.data.providers.*
+import com.hpk.data.repositories.*
+import com.hpk.data.services.*
+import com.hpk.domain.repositories.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,14 +21,13 @@ import org.koin.dsl.module
 import org.koin.dsl.single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 
 private val repositoriesModule = module {
     single<FuelTypeRepositoryImpl>() bind FuelTypeRepository::class
     single<LocationRepositoryImpl>() bind LocationRepository::class
 }
 private val locationModule = module {
-    single<FusedLocationProviderClient> {
+    single {
         LocationServices.getFusedLocationProviderClient(
             androidContext()
         )
@@ -59,20 +54,16 @@ private val networkModule = module {
     factory<GsonConverterFactory> { GsonConverterFactory.create(get()) }
 
     factory {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        loggingInterceptor
+        HttpLoggingInterceptor().apply {
+            this.level = HttpLoggingInterceptor.Level.BODY
+        }
     }
 
     factory {
         Interceptor {
             val builder = it.request().newBuilder()
                 .url(it.request().url)
-            builder.header(RestConst.HEADER_APP_VERSION, BuildConfig.VERSION_NAME)
-            builder.header(RestConst.HEADER_PLATFORM, RestConst.CONTENT_PLATFORM)
-            builder.header(RestConst.HEADER_ACCEPT_LANGUAGE, Locale.getDefault().language)
             builder.header(RestConst.CONTENT_TYPE, RestConst.CONTENT_TYPE_JSON)
-
             it.proceed(builder.build())
         }
     }
