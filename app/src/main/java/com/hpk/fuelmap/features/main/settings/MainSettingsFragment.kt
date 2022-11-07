@@ -7,27 +7,25 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.hpk.fuelmap.R
 import com.hpk.fuelmap.common.ui.base.BaseFragment
 import com.hpk.fuelmap.databinding.FragmentMainSettingsBinding
+import com.hpk.fuelmap.features.main.MainVM
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainSettingsFragment : BaseFragment(R.layout.fragment_main_settings) {
 
     private val binding: FragmentMainSettingsBinding by viewBinding(FragmentMainSettingsBinding::bind)
-    private val viewModel: MainSettingsVM by viewModel()
+    private val viewModel: MainVM by sharedViewModel()
 
     private val listAdapter = FuelTypesAdapter()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeFuelTypes()
         initViews()
-        observeLoading(viewModel.isLoading)
-        observeErrorMessage(binding.errorContainer, viewModel.errorMessage)
     }
 
     private fun initViews() {
         binding.fuelTypesRecycler.layoutManager = LinearLayoutManager(context)
-        listAdapter.onIsSwitcherChecked = { fuelType, isChecked ->
-            viewModel.saveFuelTypeState(fuelType, isChecked)
+        listAdapter.onIsSwitcherChecked = { fuelType ->
+            viewModel.saveFuelTypeState(fuelType)
         }
         binding.fuelTypesRecycler.adapter = listAdapter
         viewModel.getAllFuelsTypes()

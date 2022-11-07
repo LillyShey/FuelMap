@@ -11,11 +11,11 @@ ext.projectSettings = projectSettings
 
 //region ------------------------Build Type settings----------------------------
 def buildTypeSettings = [:]
-buildTypeSettings.stagingBaseUrl = "https://fuelmap-stag.k8s.stfalcon.com/api/"
+buildTypeSettings.stagingBaseUrl = "https://api-fuelmap-stag.k8s.stfalcon.com/api/"
 buildTypeSettings.stagingApiVersion = "v1.0/"
-buildTypeSettings.demoBaseUrl = "https://fuelmap-stag.k8s.stfalcon.com/api/"
+buildTypeSettings.demoBaseUrl = "https://api-fuelmap-stag.k8s.stfalcon.com/api/"
 buildTypeSettings.demoApiVersion = "v1.0/"
-buildTypeSettings.prodBaseUrl = "https://fuelmap-stag.k8s.stfalcon.com/api/"
+buildTypeSettings.prodBaseUrl = "https://api-fuelmap-stag.k8s.stfalcon.com/api/"
 buildTypeSettings.prodApiVersion = "v1.0/"
 
 ext.buildTypeSettings = buildTypeSettings

@@ -58,12 +58,12 @@ private val networkModule = module {
             this.level = HttpLoggingInterceptor.Level.BODY
         }
     }
-
     factory {
         Interceptor {
             val builder = it.request().newBuilder()
                 .url(it.request().url)
             builder.header(RestConst.CONTENT_TYPE, RestConst.CONTENT_TYPE_JSON)
+            builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Njc4NDYxNDgsImV4cCI6MTY2NzkzMjU0OCwicm9sZXMiOlsiUk9MRV9BTk9OWU1PVVMiXSwidXNlcm5hbWUiOiJhbm9ueW1vdXMifQ.GGmSBA4Z2gGlRe7tZWfUMKwaR3AN-_7KUjIsXWp5onDDgsTzT2QwyXbvidiQ6gRSjiHQ2D6CtvANPbAVCIpYIyszKO93hOaZtRPYguFkGdthFMTzls52_RxgSH5bao6ndvCAMQ8YzwQeLMBfk2pBnuZrq6oey4QpnC7Mk2__akSlOdAbzw3xTl6DzUCm4I1gEEwZ6DVN-IIx9ohCKCVwMn2ueeJUZmmm_8YKfr2tf1EyCQhDvPA4UOVYhNScnRSIpnAub-Myrt9JVeFBlpkcpET5dc_GXhbOxPPa969rqA3xcVzVtoQK3BAg74u99OD4MNWkh-e4BAPxSRmQKqDrlA")
             it.proceed(builder.build())
         }
     }

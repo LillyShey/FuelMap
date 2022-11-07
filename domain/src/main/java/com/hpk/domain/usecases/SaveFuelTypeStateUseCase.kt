@@ -7,17 +7,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class SaveFuelTypeStateUseCase(private val fuelTypeRepository: FuelTypeRepository) :
-    BaseUseCase<List<FuelType>, SaveFuelTypeStateUseCase.Params>() {
-    override suspend fun remoteWork(params: Params?): List<FuelType> {
+    BaseUseCase<Unit, SaveFuelTypeStateUseCase.Params>() {
+    override suspend fun remoteWork(params: Params?){
         return withContext(Dispatchers.IO) {
             params.let {
-                fuelTypeRepository.saveFuelTypeState(params!!.fuelType, params.isChecked)
+                fuelTypeRepository.saveFuelTypeState(params!!.fuelType)
             }
         }
     }
 
     class Params(
-        val fuelType: FuelType,
-        val isChecked: Boolean,
+        val fuelType: FuelType
     )
 }

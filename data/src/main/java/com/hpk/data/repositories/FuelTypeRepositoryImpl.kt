@@ -30,10 +30,9 @@ class FuelTypeRepositoryImpl(
         }
     }
 
-    override suspend fun saveFuelTypeState(fuelType: FuelType, isChecked: Boolean): List<FuelType> {
+    override suspend fun saveFuelTypeState(fuelType: FuelType){
         val sharedPreferencesList = fuelTypeProvider.getFuelTypesState() as ArrayList<FuelType>
-        sharedPreferencesList.find { it.id == fuelType.id }?.isChecked = isChecked
+        sharedPreferencesList[sharedPreferencesList.indexOfFirst { it.id == fuelType.id }] = fuelType
         fuelTypeProvider.saveFuelTypesState(sharedPreferencesList)
-        return fuelTypeProvider.getFuelTypesState()
     }
 }

@@ -41,16 +41,4 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/settingsTitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <include
-        android:id="@+id/loadingContainer"
-        layout="@layout/part_view_loading" />
-
-    <com.hpk.fuelmap.common.ui.error.ErrorItem
-        android:id="@+id/errorContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:paddingBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
