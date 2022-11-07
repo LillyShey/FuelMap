@@ -3,12 +3,9 @@ package com.hpk.fuelmap.features.main.settings
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hpk.domain.models.fuel.FuelType
 import com.hpk.fuelmap.databinding.ListItemFuelTypesBinding
-import splitties.toast.toast
 
 class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHolder>() {
     var fuelTypesList: List<FuelType>? = null
@@ -17,6 +14,7 @@ class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHold
             field = value
             notifyDataSetChanged()
         }
+    var onIsSwitcherChecked: ((FuelType, Boolean) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FuelTypesViewHolder {
         val binding = ListItemFuelTypesBinding.inflate(
@@ -28,7 +26,7 @@ class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHold
 
     override fun onBindViewHolder(holder: FuelTypesViewHolder, position: Int) {
         fuelTypesList?.let {
-            holder.onBind(it[position])
+            holder.onBind(it[position], onIsSwitcherChecked)
         }
     }
 
@@ -36,10 +34,12 @@ class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHold
 
     inner class FuelTypesViewHolder(private val binding: ListItemFuelTypesBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(item: FuelType) {
+        fun onBind(item: FuelType, onSwitcherChecked: ((FuelType, Boolean) -> Unit)?) {
             binding.fuelNameTV.text = item.name
             binding.fuelSwitch.isChecked = item.isChecked ?: false
-
+            binding.fuelSwitch.setOnCheckedChangeListener { _, isChecked ->
+                onSwitcherChecked?.invoke(item, isChecked)
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import com.hpk.fuelmap.R
 import com.hpk.fuelmap.common.ui.base.BaseFragment
 import com.hpk.fuelmap.databinding.FragmentMainSettingsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import splitties.toast.toast
 
 class MainSettingsFragment : BaseFragment(R.layout.fragment_main_settings) {
 
@@ -24,6 +25,9 @@ class MainSettingsFragment : BaseFragment(R.layout.fragment_main_settings) {
 
     private fun initViews() {
         binding.fuelTypesRecycler.layoutManager = LinearLayoutManager(context)
+        listAdapter.onIsSwitcherChecked = { fuelType, isChecked ->
+            viewModel.saveFuelTypeState(fuelType, isChecked)
+        }
         binding.fuelTypesRecycler.adapter = listAdapter
         viewModel.getAllFuelsTypes()
     }

@@ -16,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import splitties.toast.longToast
 import splitties.toast.toast
 
+
 class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
     companion object {
         private const val ZOOM_LEVEL = 16.0f
@@ -85,7 +86,8 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
     }
 
     private fun moveCameraCurrentLocation(coordinates: Coordinates) {
+
         val position = LatLng(coordinates.latitude, coordinates.longitude)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_LEVEL))
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_LEVEL))
     }
 }
