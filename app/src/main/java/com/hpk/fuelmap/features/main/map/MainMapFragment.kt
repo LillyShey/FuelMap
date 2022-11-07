@@ -13,6 +13,7 @@ import com.hpk.fuelmap.common.extensions.setDefaultMapStyle
 import com.hpk.fuelmap.common.extensions.showPermissionRequiredDialog
 import com.hpk.fuelmap.common.ui.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import splitties.toast.longToast
 import splitties.toast.toast
 
@@ -32,7 +33,7 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         checkLocationPermission()
     }
 
-    private fun observeData(){
+    private fun observeData() {
         observerCurrentLocation()
         observeLocationError()
     }

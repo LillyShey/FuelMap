@@ -48,7 +48,7 @@ class MainSettingsVM(
             params = SaveFuelTypeStateUseCase.Params(fuelType = fuelType, isChecked = isChecked),
             result = ResultCallbacks(
                 onSuccess = {
-                    getAllFuelsTypes()
+                    fuelTypes.value = it
                 },
                 onError = {
                     timber.log.Timber.e(it)
