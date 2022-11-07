@@ -1,5 +1,6 @@
 package com.hpk.data.repositories
 
+import com.hpk.data.api.models.responses.fuel.FuelTypeResponse
 import com.hpk.data.extensions.mapToApiErrors
 import com.hpk.data.providers.FuelTypeProvider
 import com.hpk.data.services.FuelTypeService
@@ -12,21 +13,18 @@ class FuelTypeRepositoryImpl(
 ) : FuelTypeRepository {
     override suspend fun getAllFuelTypes(): List<FuelType> {
         try {
-            //FIXME Change to get data from API
-            var list = ArrayList<FuelType>()
-            if (fuelTypeProvider.getFuelTypesState().isEmpty()) {
-//                for (fuelType in fuelTypeService.getAllFuelTypes()) {
-//                    list.add(FuelTypeResponse.mapToDomain(fuelType))
-//                }
-                list.add(FuelType("1", "95"))
-                list.add(FuelType("2", "92", true))
-                list.add(FuelType("3", "ДП", true))
-                list.add(FuelType("4", "Газ"))
-                fuelTypeProvider.saveFuelTypesState(list)
-            } else {
-                list = fuelTypeProvider.getFuelTypesState().toList() as ArrayList<FuelType>
+            val sharedPreferencesList = fuelTypeProvider.getFuelTypesState()
+            val apiList = fuelTypeService.getAllFuelTypes()
+                .map { fuelType -> FuelTypeResponse.mapToDomain(fuelType) }
+            if (sharedPreferencesList.isEmpty()) {
+                fuelTypeProvider.saveFuelTypesState(apiList)
+            } else if (sharedPreferencesList.map { it.id } != apiList.map { it.id }) {
+                val onlyNew = apiList.map { apiType ->
+                    !sharedPreferencesList.map { sharedType -> sharedType.id }.contains(apiType.id)
+                }
+                fuelTypeProvider.saveFuelTypesState((sharedPreferencesList + onlyNew).filterIsInstance<FuelType>())
             }
-            return list
+            return fuelTypeProvider.getFuelTypesState()
         } catch (e: Throwable) {
             throw e.mapToApiErrors()
         }
