@@ -3,12 +3,9 @@ package com.hpk.fuelmap.features.main.settings
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hpk.domain.models.fuel.FuelType
 import com.hpk.fuelmap.databinding.ListItemFuelTypesBinding
-import splitties.toast.toast
 
 class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHolder>() {
     var fuelTypesList: List<FuelType>? = null

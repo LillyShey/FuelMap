@@ -1,4 +1,4 @@
-package com.hpk.domain.usecases
+package com.hpk.domain.usecases.fuel
 
 import com.hpk.domain.models.fuel.FuelType
 import com.hpk.domain.repositories.FuelTypeRepository

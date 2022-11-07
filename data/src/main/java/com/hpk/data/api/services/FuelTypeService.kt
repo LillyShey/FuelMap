@@ -1,4 +1,4 @@
-package com.hpk.data.services
+package com.hpk.data.api.services
 
 import com.hpk.data.api.models.responses.fuel.FuelTypeResponse
 import retrofit2.http.GET

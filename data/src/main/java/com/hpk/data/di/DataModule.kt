@@ -9,7 +9,7 @@ import com.hpk.data.BuildConfig
 import com.hpk.data.api.RestConst
 import com.hpk.data.providers.*
 import com.hpk.data.repositories.*
-import com.hpk.data.services.*
+import com.hpk.data.api.services.*
 import com.hpk.domain.repositories.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -25,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 private val repositoriesModule = module {
     single<FuelTypeRepositoryImpl>() bind FuelTypeRepository::class
     single<LocationRepositoryImpl>() bind LocationRepository::class
+    single<StationRepositoryImpl>() bind StationRepository::class
 }
 private val locationModule = module {
     single {
@@ -43,6 +44,7 @@ private val locationModule = module {
 }
 private val apiServicesModule = module {
     single<FuelTypeService> { (get() as Retrofit).create(FuelTypeService::class.java) }
+    single<StationService> { (get() as Retrofit).create(StationService::class.java) }
 }
 private val networkModule = module {
     factory<Gson> {
@@ -63,6 +65,7 @@ private val networkModule = module {
         Interceptor {
             val builder = it.request().newBuilder()
                 .url(it.request().url)
+            builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Njc2NzU5NDksImV4cCI6MTY2NzY3Nzc0OSwicm9sZXMiOlsiUk9MRV9BUFAiXSwidXNlcm5hbWUiOiJhcHBfZnVlbG1hcEBzdGZhbGNvbi5jb20ifQ.HgHx4Dn7p-y7EJOwkTxE8YJ91_stcKHZTxDY_jAa73OlTgTD3jY_zFbJT2H01Yl7MPAdyKJ_bmFkWrQfPaKI4PsCgRTmJVj7GcWdxWcbHlZl3aiHTimkSFZWWpnubyMOTO5hLbvm_1Yy8iygd0DbGtQ_3Np15aItpNvfqr94Q_XC7BIRxxd2QOeTLjmrORBjGPgLQQlF2ynxqHdHx7gfay_CDC-k55uB0Ts16A_MeL4ug4ikMBqrvbO_SHh1jyOXQM7nnl_ZQ_yESJon-dblJoUntR4cNv_-_9LEdwFYMgUgPRroPN4nY-SdMbBjijr-ey0ucmEakInOOxUA0OwBLw")
             builder.header(RestConst.CONTENT_TYPE, RestConst.CONTENT_TYPE_JSON)
             it.proceed(builder.build())
         }

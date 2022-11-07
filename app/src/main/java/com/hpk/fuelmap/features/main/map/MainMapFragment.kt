@@ -2,16 +2,20 @@ package com.hpk.fuelmap.features.main.map
 
 import android.os.Bundle
 import android.view.View
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.hpk.domain.models.common.Coordinates
 import com.hpk.fuelmap.R
 import com.hpk.fuelmap.common.extensions.requestAppPermission
 import com.hpk.fuelmap.common.extensions.setDefaultMapStyle
 import com.hpk.fuelmap.common.extensions.showPermissionRequiredDialog
 import com.hpk.fuelmap.common.ui.base.BaseFragment
+import com.hpk.fuelmap.databinding.FragmentMainMapBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import splitties.toast.longToast
 import splitties.toast.toast
@@ -20,20 +24,23 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
     companion object {
         private const val ZOOM_LEVEL = 16.0f
     }
-
+    private val binding: FragmentMainMapBinding by viewBinding(FragmentMainMapBinding::bind)
     private val viewModel: MainMapVM by viewModel()
-    private lateinit var googleMap: GoogleMap
     private var isLocationApprove = false
+    private lateinit var googleMap: GoogleMap
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMap()
         checkLocationPermission()
+        observeLoading(viewModel.isLoading)
+        observeErrorMessage(binding.errorContainer, viewModel.errorMessage)
     }
 
-    private fun observeData(){
+    private fun observeData() {
         observerCurrentLocation()
         observeLocationError()
+        observerStations()
     }
 
     private fun checkLocationPermission() {
@@ -64,6 +71,9 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
                 with(it) {
                     googleMap = this
                     googleMap.setDefaultMapStyle(isLocationApprove)
+                    googleMap.setOnCameraMoveListener {
+                        viewModel.setLatLngBounds(googleMap.projection.visibleRegion.latLngBounds)
+                    }
                     observeData()
                 }
             }
@@ -74,6 +84,20 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         viewModel.currentLocation.observe(viewLifecycleOwner) { coordinates ->
             coordinates?.let {
                 moveCameraCurrentLocation(it)
+            }
+        }
+    }
+
+    private fun observerStations() {
+        viewModel.stations.observe(viewLifecycleOwner) { stations ->
+            googleMap.clear()
+            stations?.map { station ->
+                googleMap.addMarker(MarkerOptions()
+                    .position(LatLng(
+                        station.coordinates.latitude,
+                        station.coordinates.longitude))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_fuel_marker))
+                )
             }
         }
     }
