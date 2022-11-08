@@ -12,7 +12,7 @@ class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHold
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
-            notifyDataSetChanged()
+            value?.let { notifyItemRangeChanged(0, it.size) }
         }
     var onIsSwitcherChecked: ((FuelType) -> Unit)? = null
 
