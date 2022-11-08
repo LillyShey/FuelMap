@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
     app:startDestination="@id/mainMapFragment">
-
     <fragment
         android:id="@+id/mainMapFragment"
         android:name="com.hpk.fuelmap.features.main.map.MainMapFragment"

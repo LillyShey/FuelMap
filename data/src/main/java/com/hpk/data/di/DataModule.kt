@@ -65,7 +65,7 @@ private val networkModule = module {
         Interceptor {
             val builder = it.request().newBuilder()
                 .url(it.request().url)
-            builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Njc2NzU5NDksImV4cCI6MTY2NzY3Nzc0OSwicm9sZXMiOlsiUk9MRV9BUFAiXSwidXNlcm5hbWUiOiJhcHBfZnVlbG1hcEBzdGZhbGNvbi5jb20ifQ.HgHx4Dn7p-y7EJOwkTxE8YJ91_stcKHZTxDY_jAa73OlTgTD3jY_zFbJT2H01Yl7MPAdyKJ_bmFkWrQfPaKI4PsCgRTmJVj7GcWdxWcbHlZl3aiHTimkSFZWWpnubyMOTO5hLbvm_1Yy8iygd0DbGtQ_3Np15aItpNvfqr94Q_XC7BIRxxd2QOeTLjmrORBjGPgLQQlF2ynxqHdHx7gfay_CDC-k55uB0Ts16A_MeL4ug4ikMBqrvbO_SHh1jyOXQM7nnl_ZQ_yESJon-dblJoUntR4cNv_-_9LEdwFYMgUgPRroPN4nY-SdMbBjijr-ey0ucmEakInOOxUA0OwBLw")
+            builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Njc5MDY4MDUsImV4cCI6MTY2Nzk5MzIwNSwicm9sZXMiOlsiUk9MRV9BTk9OWU1PVVMiXSwidXNlcm5hbWUiOiJhbm9ueW1vdXMifQ.FxUJc-ZaE2Ln7OmxTxAU9P3vxm3ckVzHwMfxIidz95b5DrQ6qvuMSThoHExAG3_mcmdxyhHV36bEfsrJl3qhgNoRc_99iU2ib3P9NLW1tXi__CdGx5fb2hueAGdobL30EbqQ4NZDru7vTVpfjZNj_l_Edl-UXNvoI_g6pvpAP1AZQuGgV0vOQiMrCHNRbRvCoKH6ZmKdl3a9qorV3l6PoXJtkiA7mQb4sQhJ3dnSKEO1y_UKsLK3Xixzo2rrqEl14ACkrg5HNmTOw0PH9Y3GnZPRnnx3sfqyJovZaZUCDcnUN6kRsrF_8BojjZeaTOBDlB_ZaIjYhUUPXLvAak1B5g")
             builder.header(RestConst.CONTENT_TYPE, RestConst.CONTENT_TYPE_JSON)
             it.proceed(builder.build())
         }

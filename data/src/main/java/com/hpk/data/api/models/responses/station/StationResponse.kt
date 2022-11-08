@@ -6,22 +6,22 @@ import com.hpk.domain.models.common.Coordinates
 import com.hpk.domain.models.station.Station
 
 class StationResponse(
-    @SerializedName("station_id")
-    val station_id: String,
+    @SerializedName("id")
+    val id: String,
     @SerializedName("coordinates")
     val coordinates: Coordinates,
 ) {
     companion object : ModelMapper<Station, StationResponse> {
         override fun mapTo(model: Station): StationResponse {
             return StationResponse(
-                station_id = model.station_id,
+                id = model.id,
                 coordinates = model.coordinates
             )
         }
 
         override fun mapToDomain(model: StationResponse): Station {
             return Station(
-                station_id = model.station_id,
+                id = model.id,
                 coordinates = model.coordinates
             )
         }
