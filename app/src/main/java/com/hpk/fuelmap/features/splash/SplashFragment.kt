@@ -8,6 +8,7 @@ import com.hpk.fuelmap.R
 import com.hpk.fuelmap.common.ui.base.BaseFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : BaseFragment(R.layout.fragment_splash) {
 

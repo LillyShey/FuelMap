@@ -34,6 +34,11 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         checkLocationPermission()
     }
 
+    override fun onResume() {
+        super.onResume()
+        observerCurrentLocation()
+    }
+
     private fun observeData() {
         observerCurrentLocation()
         observeLocationError()
@@ -86,8 +91,13 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         }
     }
 
-    private fun moveCameraCurrentLocation(coordinates: Coordinates) {
-        val position = LatLng(coordinates.latitude, coordinates.longitude)
-        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_LEVEL))
+    private fun moveCameraCurrentLocation(coordinates: Coordinates?) {
+        coordinates?.let { it ->
+            val position = LatLng(it.latitude,
+                it.longitude)
+            position.let {
+                googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, ZOOM_LEVEL))
+            }
+        }
     }
 }

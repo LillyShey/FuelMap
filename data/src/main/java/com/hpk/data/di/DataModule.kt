@@ -99,6 +99,7 @@ private val networkModule = module {
 }
 private val providersModule = module {
     single<FuelTypeProvider>()
+    single<TokenProvider>()
 }
 
 val dataModule = arrayOf(
