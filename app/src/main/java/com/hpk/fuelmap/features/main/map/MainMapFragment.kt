@@ -24,7 +24,7 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
     }
 
     private val viewModel: MainVM by sharedViewModel()
-    private var googleMap: GoogleMap?=null
+    private var googleMap: GoogleMap? = null
     private var isLocationApprove = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

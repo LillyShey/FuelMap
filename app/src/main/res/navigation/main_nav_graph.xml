@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/mainMapFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/mainMapFragment"
@@ -15,4 +15,13 @@
         android:name="com.hpk.fuelmap.features.main.settings.MainSettingsFragment"
         android:label="fragment_main_settings"
         tools:layout="@layout/fragment_main_settings" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.hpk.fuelmap.features.splash.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_mainMapFragment"
+            app:destination="@id/mainMapFragment" />
+    </fragment>
 </navigation>
