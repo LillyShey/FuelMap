@@ -23,14 +23,16 @@ class MainVM(
     val currentLocation = MutableLiveData<Coordinates?>()
     val noAnyLocationError = SingleLiveEvent<Unit>()
 
+    init {
+        getAllFuelsTypes()
+    }
 
-    fun getAllFuelsTypes() {
+    private fun getAllFuelsTypes() {
         getAllFuelTypesUseCase(
             uiDispatcher = viewModelScope,
             result = ResultCallbacks(
                 onSuccess = {
-                    fuelTypes.value = it.toMutableList()
-                    fuelTypes.notifyValueChange()
+                    fuelTypes.value = it?.toMutableList()
                 },
                 onError = {
                     fuelTypes.value = null
@@ -56,27 +58,29 @@ class MainVM(
     fun saveFuelTypeState(fuelType: FuelType, isChecked: Boolean) {
         fuelTypes.value?.firstOrNull { it.id == fuelType.id }?.isChecked = isChecked
         fuelTypes.notifyValueChange()
-        saveFuelTypeStateUseCase(
-            uiDispatcher = viewModelScope,
-            params = fuelTypes.value?.let { SaveFuelTypeStateUseCase.Params(fuelTypes = it) },
-            result = ResultCallbacks(
-                onError = {
-                    timber.log.Timber.e(it)
-                    errorMessage.value = it.apiError?.toString()
-                },
-                onConnectionError = {
-                    timber.log.Timber.e(it)
-                    onConnectionError { getAllFuelsTypes() }
-                },
-                onUnexpectedError = {
-                    timber.log.Timber.e(it)
-                    errorMessage.value = it.localizedMessage
-                },
-                onLoading = {
-                    isLoading.value = it
-                }
+        fuelTypes.value?.let { list ->
+            saveFuelTypeStateUseCase(
+                uiDispatcher = viewModelScope,
+                params = SaveFuelTypeStateUseCase.Params(fuelTypes = list),
+                result = ResultCallbacks(
+                    onError = {
+                        timber.log.Timber.e(it)
+                        errorMessage.value = it.apiError?.toString()
+                    },
+                    onConnectionError = {
+                        timber.log.Timber.e(it)
+                        onConnectionError { getAllFuelsTypes() }
+                    },
+                    onUnexpectedError = {
+                        timber.log.Timber.e(it)
+                        errorMessage.value = it.localizedMessage
+                    },
+                    onLoading = {
+                        isLoading.value = it
+                    }
+                )
             )
-        )
+        }
     }
 
 

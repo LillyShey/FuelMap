@@ -14,7 +14,7 @@ class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHold
             field = value
             notifyDataSetChanged()
         }
-    var onIsSwitcherChecked: ((FuelType, Boolean) -> Unit)? = null
+    var onCheckedChanged: ((FuelType, Boolean) -> Unit)? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FuelTypesViewHolder {
@@ -27,7 +27,7 @@ class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHold
 
     override fun onBindViewHolder(holder: FuelTypesViewHolder, position: Int) {
         fuelTypesList?.let {
-            holder.onBind(it[position], onIsSwitcherChecked)
+            holder.onBind(it[position], onCheckedChanged)
         }
     }
 

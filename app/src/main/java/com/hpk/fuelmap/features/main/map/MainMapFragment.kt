@@ -24,7 +24,7 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
     }
 
     private val viewModel: MainVM by sharedViewModel()
-    private var googleMap: GoogleMap?=null
+    private var googleMap: GoogleMap? = null
     private var isLocationApprove = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,6 +32,12 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         initMap()
         observeData()
         checkLocationPermission()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        observerCurrentLocation()
+
     }
 
     private fun observeData() {
@@ -86,8 +92,17 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         }
     }
 
-    private fun moveCameraCurrentLocation(coordinates: Coordinates) {
-        val position = LatLng(coordinates.latitude, coordinates.longitude)
-        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_LEVEL))
+    private fun moveCameraCurrentLocation(coordinates: Coordinates?) {
+        coordinates?.let { it ->
+            val position = it.latitude?.let { latitude ->
+                it.longitude?.let { longitude ->
+                    LatLng(latitude,
+                        longitude)
+                }
+            }
+            position?.let {
+                googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, ZOOM_LEVEL))
+            }
+        }
     }
 }
