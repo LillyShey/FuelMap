@@ -24,8 +24,8 @@ class MainSettingsFragment : BaseFragment(R.layout.fragment_main_settings) {
 
     private fun initViews() {
         binding.fuelTypesRecycler.layoutManager = LinearLayoutManager(context)
-        listAdapter.onIsSwitcherChecked = { fuelType ->
-            viewModel.saveFuelTypeState(fuelType)
+        listAdapter.onIsSwitcherChecked = { fuelType, isChecked ->
+            viewModel.saveFuelTypeState(fuelType, isChecked)
         }
         binding.fuelTypesRecycler.adapter = listAdapter
         viewModel.getAllFuelsTypes()

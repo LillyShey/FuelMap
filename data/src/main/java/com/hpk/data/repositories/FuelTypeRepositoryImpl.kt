@@ -30,9 +30,7 @@ class FuelTypeRepositoryImpl(
         }
     }
 
-    override suspend fun saveFuelTypeState(fuelType: FuelType){
-        val sharedPreferencesList = fuelTypeProvider.getFuelTypesState() as ArrayList<FuelType>
-        sharedPreferencesList[sharedPreferencesList.indexOfFirst { it.id == fuelType.id }] = fuelType
-        fuelTypeProvider.saveFuelTypesState(sharedPreferencesList)
+    override suspend fun saveFuelTypeState(fuelTypes: List<FuelType>){
+        fuelTypeProvider.saveFuelTypesState(fuelTypes)
     }
 }

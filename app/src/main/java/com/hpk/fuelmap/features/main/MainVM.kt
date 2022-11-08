@@ -10,14 +10,16 @@ import com.hpk.domain.usecases.base.LocationResultCallbacks
 import com.hpk.domain.usecases.base.ResultCallbacks
 import com.hpk.domain.usecases.location.GetCurrentLocationUseCase
 import com.hpk.fuelmap.common.arch.SingleLiveEvent
+import com.hpk.fuelmap.common.extensions.notifyValueChange
 import com.hpk.fuelmap.common.ui.base.BaseViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class MainVM(
     private val getAllFuelTypesUseCase: GetAllFuelTypesUseCase,
     private val getCurrentLocationUseCase: GetCurrentLocationUseCase,
     private val saveFuelTypeStateUseCase: SaveFuelTypeStateUseCase,
 ) : BaseViewModel() {
-    val fuelTypes = MutableLiveData<List<FuelType>?>()
+    val fuelTypes = MutableLiveData<MutableList<FuelType>?>()
     val currentLocation = MutableLiveData<Coordinates?>()
     val noAnyLocationError = SingleLiveEvent<Unit>()
 
@@ -27,7 +29,8 @@ class MainVM(
             uiDispatcher = viewModelScope,
             result = ResultCallbacks(
                 onSuccess = {
-                    fuelTypes.value = it
+                    fuelTypes.value = it.toMutableList()
+                    fuelTypes.notifyValueChange()
                 },
                 onError = {
                     fuelTypes.value = null
@@ -50,10 +53,12 @@ class MainVM(
         )
     }
 
-    fun saveFuelTypeState(fuelType: FuelType) {
+    fun saveFuelTypeState(fuelType: FuelType, isChecked: Boolean) {
+        fuelTypes.value?.firstOrNull { it.id == fuelType.id }?.isChecked = isChecked
+        fuelTypes.notifyValueChange()
         saveFuelTypeStateUseCase(
             uiDispatcher = viewModelScope,
-            params = SaveFuelTypeStateUseCase.Params(fuelType = fuelType),
+            params = fuelTypes.value?.let { SaveFuelTypeStateUseCase.Params(fuelTypes = it) },
             result = ResultCallbacks(
                 onError = {
                     timber.log.Timber.e(it)
@@ -75,6 +80,7 @@ class MainVM(
     }
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun getCurrentLocation() {
         getCurrentLocationUseCase(
             uiDispatcher = viewModelScope,
@@ -82,7 +88,7 @@ class MainVM(
                 onSuccess = {
                     currentLocation.value = it
                 },
-                onError = {errorMsg->
+                onError = { errorMsg ->
                     errorMessage.value = errorMsg
                 },
                 onNoAnyLocationProvider = {

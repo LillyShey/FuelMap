@@ -11,12 +11,12 @@ class SaveFuelTypeStateUseCase(private val fuelTypeRepository: FuelTypeRepositor
     override suspend fun remoteWork(params: Params?){
         return withContext(Dispatchers.IO) {
             params.let {
-                fuelTypeRepository.saveFuelTypeState(params!!.fuelType)
+                fuelTypeRepository.saveFuelTypeState(params!!.fuelTypes)
             }
         }
     }
 
     class Params(
-        val fuelType: FuelType
+        val fuelTypes: List<FuelType>
     )
 }
