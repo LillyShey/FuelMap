@@ -2,11 +2,13 @@ package com.hpk.data.di
 
 import android.content.Context
 import android.location.LocationManager
+import android.util.Log
 import com.google.android.gms.location.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.hpk.data.BuildConfig
 import com.hpk.data.api.RestConst
+import com.hpk.data.api.authentificator.RefreshAuthenticator
 import com.hpk.data.providers.*
 import com.hpk.data.repositories.*
 import com.hpk.data.services.*
@@ -17,6 +19,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.bind
+import org.koin.dsl.factory
 import org.koin.dsl.module
 import org.koin.dsl.single
 import retrofit2.Retrofit
@@ -25,6 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 private val repositoriesModule = module {
     single<FuelTypeRepositoryImpl>() bind FuelTypeRepository::class
     single<LocationRepositoryImpl>() bind LocationRepository::class
+    single<AuthRepositoryImpl>() bind AuthRepository::class
+
 }
 private val locationModule = module {
     single {
@@ -42,7 +47,12 @@ private val locationModule = module {
     }
 }
 private val apiServicesModule = module {
-    single<FuelTypeService> { (get() as Retrofit).create(FuelTypeService::class.java) }
+    single<FuelTypeService> {
+        (get() as Retrofit).create(FuelTypeService::class.java)
+    }
+    single<AuthService> {
+        (get() as Retrofit).create(AuthService::class.java)
+    }
 }
 private val networkModule = module {
     factory<Gson> {
@@ -62,6 +72,10 @@ private val networkModule = module {
         Interceptor {
             val builder = it.request().newBuilder()
                 .url(it.request().url)
+            get<TokenProvider>().provideAccessToken()?.let { accessToken ->
+                Log.i("Access token", accessToken.token)
+                builder.header(RestConst.HEADER_AUTHORIZATION, "Bearer ${accessToken.token}")
+            }
             builder.header(RestConst.CONTENT_TYPE, RestConst.CONTENT_TYPE_JSON)
             it.proceed(builder.build())
         }
@@ -80,6 +94,8 @@ private val networkModule = module {
             .client(get())
             .build()
     }
+    factory<RefreshAuthenticator>()
+
 }
 private val providersModule = module {
     single<FuelTypeProvider>()
