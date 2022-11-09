@@ -1,6 +1,7 @@
 package com.hpk.domain.models.fuel
 
-data class FuelType(
-    val id: Int?,
+open class FuelType(
+    val id: String,
     val name: String?,
+    var isChecked: Boolean? = false,
 )

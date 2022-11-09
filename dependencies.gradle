@@ -11,11 +11,11 @@ ext.projectSettings = projectSettings
 
 //region ------------------------Build Type settings----------------------------
 def buildTypeSettings = [:]
-buildTypeSettings.stagingBaseUrl = "https://api.skeleton-backend.stg.stfalcon.com/api/"
+buildTypeSettings.stagingBaseUrl = "https://api-fuelmap-stag.k8s.stfalcon.com/api/"
 buildTypeSettings.stagingApiVersion = "v1.0/"
-buildTypeSettings.demoBaseUrl = "https://api.skeleton-backend.stg.stfalcon.com/api/"
+buildTypeSettings.demoBaseUrl = "https://api-fuelmap-stag.k8s.stfalcon.com/api/"
 buildTypeSettings.demoApiVersion = "v1.0/"
-buildTypeSettings.prodBaseUrl = "https://api.skeleton-backend.stg.stfalcon.com/api/"
+buildTypeSettings.prodBaseUrl = "https://api-fuelmap-stag.k8s.stfalcon.com/api/"
 buildTypeSettings.prodApiVersion = "v1.0/"
 
 ext.buildTypeSettings = buildTypeSettings
@@ -40,19 +40,21 @@ versions.androidKtxVersion="1.9.0"
 versions.appCompatVersion="1.5.1"
 versions.materialVersion= '1.7.0'
 versions.constraintLayoutVersion="2.1.4"
-versions.koinVersion= "3.2.2"
+versions.koinVersion= "3.1.2"
 versions.koinExtVersion = "3.0.2"
-versions.coroutinesVerison="1.6.4"
+versions.coroutinesVerison="1.6.1"
 versions.multidexVersion="2.0.1"
-versions.coroutinesVerison = "1.6.4"
-versions.retrofitVersion = "2.9.0"
-versions.gsonVersion = '2.9.1'
-versions.okHttpVersion = '5.0.0-alpha.10'
-versions.viewBindingUtils = '1.5.6'
+versions.retrofitVersion = '2.9.0'
+versions.gsonVersion = '2.9.0'
+versions.okHttpVersion = '4.9.3'
+versions.viewBindingUtils = '1.5.2'
 versions.timberVersion = '5.0.1'
 versions.timberKtVersion = '1.5.1'
 versions.navigationVersion = '2.5.2'
 versions.splittiesVersion = "3.0.0-rc01"
 versions.dexterVersion = "6.2.3"
+versions.googlePlayServicesMapsVersion = "18.1.0"
+versions.googlePlayServicesLocationVersion = "21.0.0"
+versions.mapUtilsVersion = "2.3.0"
 ext.versions = versions
 //endregion ---------------------------------------------------------
