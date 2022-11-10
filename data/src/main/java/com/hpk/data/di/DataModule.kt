@@ -60,13 +60,14 @@ private val networkModule = module {
             this.level = HttpLoggingInterceptor.Level.BODY
         }
     }
-
     factory {
         Interceptor {
             val builder = it.request().newBuilder()
                 .url(it.request().url)
             builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NjgwMDAyNjcsImV4cCI6MTY2ODA4NjY2Nywicm9sZXMiOlsiUk9MRV9BTk9OWU1PVVMiXSwidXNlcm5hbWUiOiJhbm9ueW1vdXMifQ.h0RkyCLa4dxdoqkoq6YImINvOPaZYytiyadth0q_yNaBK3mR5qrGVUPo7epAMR__ZRI2kyH4Z3M3xUxP2T_4OyHwFM_amy6Ng2JPUJYtfvjAMcRAn6KxyajT2gZAn6n1FED1j1e7gn3XnfYWOh7ZDRsYMZWRHAcImYeSECzyAz_ySul-CEDgnaqEPrT4X5d5pManD5PTiHCvtpS8uHUWd81U0uljEUhPpNSO7r3ieAkZIrIPWWGjBgViCtLlCPnIHzqEF19U-7mBhjMRRDsVOV5HkXV58bZbV5KCijyDqKSk0nF9-vGrF1HaxYicZgfxcdOwLMrFMtnlYK7JvUcv8g")
             builder.header(RestConst.CONTENT_TYPE, RestConst.CONTENT_TYPE_JSON)
+            //FIXME Add token flow
+//            builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Njc4NDYxNDgsImV4cCI6MTY2NzkzMjU0OCwicm9sZXMiOlsiUk9MRV9BTk9OWU1PVVMiXSwidXNlcm5hbWUiOiJhbm9ueW1vdXMifQ.GGmSBA4Z2gGlRe7tZWfUMKwaR3AN-_7KUjIsXWp5onDDgsTzT2QwyXbvidiQ6gRSjiHQ2D6CtvANPbAVCIpYIyszKO93hOaZtRPYguFkGdthFMTzls52_RxgSH5bao6ndvCAMQ8YzwQeLMBfk2pBnuZrq6oey4QpnC7Mk2__akSlOdAbzw3xTl6DzUCm4I1gEEwZ6DVN-IIx9ohCKCVwMn2ueeJUZmmm_8YKfr2tf1EyCQhDvPA4UOVYhNScnRSIpnAub-Myrt9JVeFBlpkcpET5dc_GXhbOxPPa969rqA3xcVzVtoQK3BAg74u99OD4MNWkh-e4BAPxSRmQKqDrlA")
             it.proceed(builder.build())
         }
     }

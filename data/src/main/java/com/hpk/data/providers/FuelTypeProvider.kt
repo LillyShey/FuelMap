@@ -2,7 +2,6 @@ package com.hpk.data.providers
 
 import android.content.Context
 import com.google.gson.Gson
-import com.hpk.data.api.models.responses.fuel.FuelTypeResponse
 import com.hpk.domain.models.fuel.FuelType
 
 class FuelTypeProvider(
@@ -29,8 +28,8 @@ class FuelTypeProvider(
         ).apply()
     }
 
-    fun getFuelTypesState(): List<FuelType> = gson.fromJson(
-        sharedPreferences.getString(FUEL_TYPES_STATE, ArrayList<FuelType>().toString()),
+    fun getFuelTypesState(): Array<FuelType>? = gson.fromJson(
+        sharedPreferences.getString(FUEL_TYPES_STATE, null),
         Array<FuelType>::class.java
-    ).toList()
+    )
 }

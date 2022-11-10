@@ -46,7 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:paddingBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/mainBottomNavView" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainBottomNavView"
         style="@style/MainBottomNavigation"
@@ -56,5 +57,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

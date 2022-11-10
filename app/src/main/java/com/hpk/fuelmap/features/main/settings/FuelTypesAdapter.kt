@@ -14,6 +14,8 @@ class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHold
             field = value
             notifyDataSetChanged()
         }
+    var onCheckedChanged: ((FuelType, Boolean) -> Unit)? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FuelTypesViewHolder {
         val binding = ListItemFuelTypesBinding.inflate(
@@ -25,7 +27,7 @@ class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHold
 
     override fun onBindViewHolder(holder: FuelTypesViewHolder, position: Int) {
         fuelTypesList?.let {
-            holder.onBind(it[position])
+            holder.onBind(it[position], onCheckedChanged)
         }
     }
 
@@ -33,10 +35,14 @@ class FuelTypesAdapter : RecyclerView.Adapter<FuelTypesAdapter.FuelTypesViewHold
 
     inner class FuelTypesViewHolder(private val binding: ListItemFuelTypesBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(item: FuelType) {
+        fun onBind(item: FuelType, onSwitcherChecked: ((FuelType, Boolean) -> Unit)?) {
             binding.fuelNameTV.text = item.name
-            binding.fuelSwitch.isChecked = item.isChecked ?: false
-
+            binding.fuelSwitch.isChecked = item.isChecked == true
+            binding.fuelSwitch.setOnCheckedChangeListener { view, isChecked ->
+                if (view.isPressed) {
+                    onSwitcherChecked?.invoke(item, isChecked)
+                }
+            }
         }
     }
 }

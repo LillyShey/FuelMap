@@ -9,19 +9,19 @@ class FuelTypeResponse(
     val id: String,
     @SerializedName("name")
     val name: String?,
-){
-    companion object: ModelMapper<FuelType, FuelTypeResponse> {
+) {
+    companion object : ModelMapper<FuelType, FuelTypeResponse> {
         override fun mapTo(model: FuelType): FuelTypeResponse {
             return FuelTypeResponse(
-                id=model.id,
-                name=model.name
+                id = model.id,
+                name = model.name
             )
         }
 
         override fun mapToDomain(model: FuelTypeResponse): FuelType {
             return FuelType(
-                id=model.id,
-                name=model.name
+                id = model.id,
+                name = model.name
             )
         }
     }
