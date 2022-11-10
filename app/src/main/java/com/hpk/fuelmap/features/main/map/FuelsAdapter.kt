@@ -40,7 +40,7 @@ class FuelsAdapter(private val context: Context) :
         fun onBind(item: Fuel) {
             binding.fuelNameTV.text = context.getString(R.string.fuel_name, item.name)
 
-            binding.fuelBrandTV.text = context.getString(R.string.fuel_brand, item.brand?.toString())
+            binding.fuelBrandTV.text = context.getString(R.string.fuel_brand, item.brand)
             binding.specialTV.text = context.getString(R.string.fuel_speciality, item.special)
             if (item.availability == true) {
                 binding.availabilityIV.setBackgroundResource(R.drawable.icon_available)

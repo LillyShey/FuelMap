@@ -64,10 +64,9 @@ private val networkModule = module {
         Interceptor {
             val builder = it.request().newBuilder()
                 .url(it.request().url)
-            builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NjgwMDAyNjcsImV4cCI6MTY2ODA4NjY2Nywicm9sZXMiOlsiUk9MRV9BTk9OWU1PVVMiXSwidXNlcm5hbWUiOiJhbm9ueW1vdXMifQ.h0RkyCLa4dxdoqkoq6YImINvOPaZYytiyadth0q_yNaBK3mR5qrGVUPo7epAMR__ZRI2kyH4Z3M3xUxP2T_4OyHwFM_amy6Ng2JPUJYtfvjAMcRAn6KxyajT2gZAn6n1FED1j1e7gn3XnfYWOh7ZDRsYMZWRHAcImYeSECzyAz_ySul-CEDgnaqEPrT4X5d5pManD5PTiHCvtpS8uHUWd81U0uljEUhPpNSO7r3ieAkZIrIPWWGjBgViCtLlCPnIHzqEF19U-7mBhjMRRDsVOV5HkXV58bZbV5KCijyDqKSk0nF9-vGrF1HaxYicZgfxcdOwLMrFMtnlYK7JvUcv8g")
             builder.header(RestConst.CONTENT_TYPE, RestConst.CONTENT_TYPE_JSON)
             //FIXME Add token flow
-//            builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Njc4NDYxNDgsImV4cCI6MTY2NzkzMjU0OCwicm9sZXMiOlsiUk9MRV9BTk9OWU1PVVMiXSwidXNlcm5hbWUiOiJhbm9ueW1vdXMifQ.GGmSBA4Z2gGlRe7tZWfUMKwaR3AN-_7KUjIsXWp5onDDgsTzT2QwyXbvidiQ6gRSjiHQ2D6CtvANPbAVCIpYIyszKO93hOaZtRPYguFkGdthFMTzls52_RxgSH5bao6ndvCAMQ8YzwQeLMBfk2pBnuZrq6oey4QpnC7Mk2__akSlOdAbzw3xTl6DzUCm4I1gEEwZ6DVN-IIx9ohCKCVwMn2ueeJUZmmm_8YKfr2tf1EyCQhDvPA4UOVYhNScnRSIpnAub-Myrt9JVeFBlpkcpET5dc_GXhbOxPPa969rqA3xcVzVtoQK3BAg74u99OD4MNWkh-e4BAPxSRmQKqDrlA")
+            builder.header(RestConst.HEADER_AUTHORIZATION, "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NjgwNjYyNzEsImV4cCI6MTY2ODE1MjY3MSwicm9sZXMiOlsiUk9MRV9BTk9OWU1PVVMiXSwidXNlcm5hbWUiOiJhbm9ueW1vdXMifQ.b5pkeyk_fPaFnxLe9uJkztnyb44JMgt6rvb5DwpWl6sJtpOXd1wb1Zw2LZSnkXdOV9qZgTZtJ64MTlFWMfo4Mi2FtD0SeMGWukgYFYH5Ld-kt-1ZtMf6c9aq_tL7x01U3llgikWQt0XydkUcjRrJzFAS3XZVRvPx3znsuTgcojaocMstQuqaBbSxe8521_OAX7xECEHj5z_vGDeQy-gR52rYAFBqyypFV0OkWi8OvPZ2Ii5i8F_slNAQuv57asUOkssYuAhB9Zi0v44KOAJI2W6J9ty8ea-PDjh22Qk-eQbZL8NfV9gJ-ErN3fOVlnyrwD7zEqWs8YZ1BWaQghARtw")
             it.proceed(builder.build())
         }
     }

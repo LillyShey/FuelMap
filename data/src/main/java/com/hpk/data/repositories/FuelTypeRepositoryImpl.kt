@@ -1,9 +1,9 @@
 package com.hpk.data.repositories
 
 import com.hpk.data.api.models.responses.fuel.FuelTypeResponse
+import com.hpk.data.api.services.FuelTypeService
 import com.hpk.data.extensions.mapToApiErrors
 import com.hpk.data.providers.FuelTypeProvider
-import com.hpk.data.services.FuelTypeService
 import com.hpk.domain.models.fuel.FuelType
 import com.hpk.domain.repositories.FuelTypeRepository
 
