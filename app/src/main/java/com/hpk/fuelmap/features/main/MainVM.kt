@@ -32,16 +32,22 @@ class MainVM(
     val noAnyLocationError = SingleLiveEvent<Unit>()
     val stations = MutableLiveData<List<Station>?>()
     val stationData = MutableLiveData<StationValue>()
+    val isFirstLaunch = MutableLiveData<Boolean>()
     private val checkedFuelTypes = MutableLiveData<String?>()
     private val latLngBounds = MutableLiveData<LatLngBounds>()
 
     init {
         getAllFuelsTypes()
+        isFirstLaunch.value = true
     }
 
     fun setLatLngBounds(latLngBounds: LatLngBounds) {
         this.latLngBounds.value = latLngBounds
         getAllStationPoints()
+    }
+
+    fun setLaunch(launchState: Boolean) {
+        this.isFirstLaunch.value = launchState
     }
 
     private fun getAllFuelsTypes() {
@@ -151,9 +157,6 @@ class MainVM(
                     stations.value = null
                     Timber.e(it)
                     errorMessage.value = it.localizedMessage
-                },
-                onLoading = {
-                    isLoading.value = it
                 }
             )
         )

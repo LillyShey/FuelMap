@@ -4,7 +4,6 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
     android:clickable="true"
     android:elevation="10dp"
     android:focusable="true"
@@ -33,6 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="33dp"
-        android:text="@string/all_loading"/>
+        android:text="@string/all_loading" />
 
 </FrameLayout>

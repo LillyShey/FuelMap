@@ -2,6 +2,7 @@ package com.hpk.fuelmap.features.main
 
 import android.os.Bundle
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,8 @@ import com.hpk.fuelmap.R
 import com.hpk.fuelmap.common.ui.base.BaseActivity
 import com.hpk.fuelmap.databinding.ActivityMainBinding
 import com.hpk.fuelmap.features.main.map.FuelsAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity(R.layout.activity_main) {
@@ -27,14 +30,19 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         }
         observeLoading(viewModel.isLoading)
         observeErrorMessage(binding.errorContainer, viewModel.errorMessage)
-
+        lifecycleScope.launch{
+            delay(1000L)
+            viewModel.setLaunch(false)
+        }
     }
 
     private fun initViews() {
+        loadingContainer = binding.loadingContainer.root
         navController = findNavController(R.id.mainNavHostFragment)
         NavigationUI.setupWithNavController(binding.mainBottomNavView, navController)
         initBottomSheet()
     }
+
     private fun initBottomSheet() {
         viewModel.stationData.observe(this) { stationData ->
             val dialog = BottomSheetDialog(this)

@@ -48,7 +48,7 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
     private fun observeData() {
         observerCurrentLocation()
         observeLocationError()
-        observerStations()
+        observeStations()
     }
 
     private fun checkLocationPermission() {
@@ -82,25 +82,26 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
                     clusterManager =
                         ClusterManager(requireContext(), googleMap, MarkerManager(googleMap))
                     clusterManager?.let { cluster ->
-                        cluster.renderer = clusterRender
                         cluster.setOnClusterItemClickListener { markerItem ->
                             viewModel.getStationData(markerItem.getId())
                             true
                         }
-                        cluster.cluster()
-                        this.setOnCameraIdleListener(cluster)
+                        clusterRender = MarkerClusterRender(requireContext(), this, cluster)
+                        cluster.renderer = clusterRender
                     }
                     this.setDefaultMapStyle(isLocationApprove)
-                    this.setOnCameraMoveListener {
+                    this.setOnCameraIdleListener {
                         viewModel.setLatLngBounds(it.projection.visibleRegion.latLngBounds)
+                        clusterManager?.cluster()
                     }
+                    this.clear()
                 }
                 observeData()
             }
         }
     }
 
-    private fun observerStations() {
+    private fun observeStations() {
         viewModel.stations.observe(viewLifecycleOwner) { stations ->
             clusterManager?.clearItems()
             stations?.map { station ->
@@ -114,10 +115,12 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         }
     }
 
+
     private fun observerCurrentLocation() {
         viewModel.currentLocation.observe(viewLifecycleOwner) { coordinates ->
             coordinates?.let {
                 moveCameraCurrentLocation(it)
+
             }
         }
     }
