@@ -1,6 +1,7 @@
 package com.hpk.domain.repositories
 
 import com.hpk.domain.models.station.Station
+import com.hpk.domain.models.station.StationValue
 
 interface StationRepository {
     suspend fun getAllStationPoints(
@@ -10,4 +11,8 @@ interface StationRepository {
         northEastLongitude: Double?,
         filter: String?,
     ): List<Station>
+
+    suspend fun getStationData(
+        id: String,
+    ): StationValue
 }

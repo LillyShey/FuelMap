@@ -14,5 +14,11 @@
     <string name="permission_permanently_denied_location_message">To select your location, we need permission to use the your GPS. Go to settings for permissions.</string>
     <string name="permission_required_location_message">For correct operation application  we need permission to obtain a location</string>
     <string name="all_no_location_providers">Location detection is disabled. Please enable it in the settings</string>
+    <string name="company_text">Company name</string>
+    <string name="work_state">Стан станції: </string>
+    <string name="fuel_name">Назва: %s</string>
+    <string name="fuel_brand">Бренд: %s</string>
+    <string name="fuel_speciality">Спосіб оплати: %s</string>
+    <string name="fuel_price">%s грн/л</string>
 
 </resources>

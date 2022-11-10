@@ -1,33 +1,39 @@
-package com.hpk.fuelmap.features.main.map
+package com.hpk.fuelmap.features.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLngBounds
 import com.hpk.domain.models.common.Coordinates
+import com.hpk.domain.models.fuel.FuelType
 import com.hpk.domain.models.station.Station
+import com.hpk.domain.models.station.StationValue
 import com.hpk.domain.usecases.fuel.GetAllFuelTypesUseCase
 import com.hpk.domain.usecases.base.LocationResultCallbacks
 import com.hpk.domain.usecases.base.ResultCallbacks
 import com.hpk.domain.usecases.location.GetCurrentLocationUseCase
 import com.hpk.domain.usecases.station.GetAllStationPointsUseCase
+import com.hpk.domain.usecases.station.GetStationDataUseCase
 import com.hpk.fuelmap.common.arch.SingleLiveEvent
 import com.hpk.fuelmap.common.ui.base.BaseViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 
-class MainMapVM(
+class MainVM(
     private val getCurrentLocationUseCase: GetCurrentLocationUseCase,
     private val gelAllStationPointsUseCase: GetAllStationPointsUseCase,
     private val getAllFuelTypesUseCase: GetAllFuelTypesUseCase,
+    private val getStationDataUseCase: GetStationDataUseCase,
 ) : BaseViewModel() {
-
+    val fuelTypes = MutableLiveData<MutableList<FuelType>?>()
     val currentLocation = MutableLiveData<Coordinates?>()
+    val noAnyLocationError = SingleLiveEvent<Unit>()
     val stations = MutableLiveData<List<Station>?>()
+    val stationData = MutableLiveData<StationValue>()
     private val checkedFuelTypes = MutableLiveData<String?>()
     private val latLngBounds = MutableLiveData<LatLngBounds>()
-    val noAnyLocationError = SingleLiveEvent<Unit>()
 
     init {
-        getCheckedFuelsTypes()
+        getAllFuelsTypes()
     }
 
     fun setLatLngBounds(latLngBounds: LatLngBounds) {
@@ -35,6 +41,35 @@ class MainMapVM(
         getAllStationPoints()
     }
 
+    private fun getAllFuelsTypes() {
+        getAllFuelTypesUseCase(
+            uiDispatcher = viewModelScope,
+            result = ResultCallbacks(
+                onSuccess = {
+                    fuelTypes.value = it?.toMutableList()
+                },
+                onError = {
+                    fuelTypes.value = null
+                    Timber.e(it)
+                    errorMessage.value = it.apiError?.toString()
+                },
+                onConnectionError = {
+                    Timber.e(it)
+                    onConnectionError { getAllFuelsTypes() }
+                },
+                onUnexpectedError = {
+                    fuelTypes.value = null
+                    Timber.e(it)
+                    errorMessage.value = it.localizedMessage
+                },
+                onLoading = {
+                    isLoading.value = it
+                }
+            )
+        )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun getCurrentLocation() {
         getCurrentLocationUseCase(
             uiDispatcher = viewModelScope,
@@ -67,7 +102,7 @@ class MainMapVM(
             ),
             result = ResultCallbacks(
                 onSuccess = {
-                    if(stations.value!=it){
+                    if (stations.value != it) {
                         stations.value = it
                     }
                 },
@@ -98,7 +133,7 @@ class MainMapVM(
             result = ResultCallbacks(
                 onSuccess = { list ->
                     checkedFuelTypes.value =
-                        list.filter { it.isChecked == true }.joinToString(",") { it.id }
+                        list?.filter { it.isChecked == true }?.joinToString(",") { it.id }
                 },
                 onError = {
                     checkedFuelTypes.value = null
@@ -111,6 +146,33 @@ class MainMapVM(
                 },
                 onUnexpectedError = {
                     checkedFuelTypes.value = null
+                    Timber.e(it)
+                    errorMessage.value = it.localizedMessage
+                },
+                onLoading = {
+                    isLoading.value = it
+                }
+            )
+        )
+    }
+
+    fun getStationData(id: String) {
+        getStationDataUseCase(
+            uiDispatcher = viewModelScope,
+            params = GetStationDataUseCase.Params(id = id),
+            result = ResultCallbacks(
+                onSuccess = {
+                    stationData.value = it
+                },
+                onError = {
+                    Timber.e(it)
+                    errorMessage.value = it.apiError?.toString()
+                },
+                onConnectionError = {
+                    Timber.e(it)
+                    onConnectionError { getCheckedFuelsTypes() }
+                },
+                onUnexpectedError = {
                     Timber.e(it)
                     errorMessage.value = it.localizedMessage
                 },

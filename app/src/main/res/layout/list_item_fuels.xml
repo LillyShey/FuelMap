@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/fuelNameTV"
+        style="@style/Text"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="10dp"
+        android:gravity="start"
+        android:text="@string/fuel_name"
+        app:layout_constraintEnd_toStartOf="@+id/subscribeBtn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/fuelBrandTV"
+        style="@style/Text"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="start"
+        android:text="@string/fuel_brand"
+        app:layout_constraintEnd_toStartOf="@+id/subscribeBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fuelNameTV" />
+
+    <TextView
+        android:id="@+id/specialTV"
+        style="@style/Text"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="start"
+        android:text="@string/fuel_speciality"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/subscribeBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fuelBrandTV" />
+
+    <ImageView
+        android:id="@+id/availabilityIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/icon_available"
+        app:layout_constraintBottom_toTopOf="@id/subscribeBtn"
+        app:layout_constraintEnd_toStartOf="@id/priceTV"
+        app:layout_constraintTop_toTopOf="@id/fuelNameTV" />
+
+    <TextView
+        android:id="@+id/priceTV"
+        style="@style/Text"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="start"
+        android:text="@string/fuel_price"
+        app:layout_constraintBottom_toTopOf="@+id/subscribeBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fuelNameTV" />
+
+    <Button
+        android:id="@+id/subscribeBtn"
+        style="@style/MainButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Підписатись"
+        app:layout_constraintBottom_toBottomOf="@id/specialTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/availabilityIV" />
+</androidx.constraintlayout.widget.ConstraintLayout>
