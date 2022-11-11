@@ -1,11 +1,14 @@
 package com.hpk.fuelmap.features.main.map
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.collections.MarkerManager
 import com.hpk.domain.models.common.Coordinates
 import com.hpk.fuelmap.R
 import com.hpk.fuelmap.common.extensions.requestAppPermission
@@ -26,6 +29,9 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
     private val viewModel: MainVM by sharedViewModel()
     private var googleMap: GoogleMap? = null
     private var isLocationApprove = false
+    private var clusterManager: ClusterManager<MarkerClusterItem>? = null
+    private var clusterRender: MarkerClusterRender? = null
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,12 +42,13 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
 
     override fun onResume() {
         super.onResume()
-        observerCurrentLocation()
+        viewModel.getCurrentLocation()
     }
 
     private fun observeData() {
         observerCurrentLocation()
         observeLocationError()
+        observeStations()
     }
 
     private fun checkLocationPermission() {
@@ -66,16 +73,48 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         }
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     private fun initMap() {
         (childFragmentManager.findFragmentById(R.id.google_map) as? SupportMapFragment)?.let { supportMapFragment ->
             supportMapFragment.getMapAsync {
                 with(it) {
                     googleMap = this
-                    googleMap?.setDefaultMapStyle(isLocationApprove)
+                    clusterManager =
+                        ClusterManager(requireContext(), googleMap, MarkerManager(googleMap))
+                    clusterManager?.let { cluster ->
+                        cluster.setOnClusterItemClickListener { markerItem ->
+                            viewModel.getStationData(markerItem.getId())
+                            true
+                        }
+                        clusterRender = MarkerClusterRender(requireContext(), this, cluster)
+                        cluster.renderer = clusterRender
+                    }
+                    this.setDefaultMapStyle(isLocationApprove)
+                    this.setOnCameraIdleListener {
+                        viewModel.setLatLngBounds(it.projection.visibleRegion.latLngBounds)
+                        clusterManager?.cluster()
+                    }
+                    this.clear()
+                }
+                observeData()
+            }
+        }
+    }
+
+    private fun observeStations() {
+        viewModel.stations.observe(viewLifecycleOwner) { stations ->
+            clusterManager?.clearItems()
+            stations?.map { station ->
+                station.coordinates.latitude?.let { latitude ->
+                    station.coordinates.longitude?.let { longitude ->
+                        val marker = MarkerClusterItem(LatLng(latitude, longitude), station.id)
+                        clusterManager?.addItem(marker)
+                    }
                 }
             }
         }
     }
+
 
     private fun observerCurrentLocation() {
         viewModel.currentLocation.observe(viewLifecycleOwner) { coordinates ->
@@ -93,9 +132,13 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
 
     private fun moveCameraCurrentLocation(coordinates: Coordinates?) {
         coordinates?.let { it ->
-            val position = LatLng(it.latitude,
-                it.longitude)
-            position.let {
+            val position = it.latitude?.let { latitude ->
+                it.longitude?.let { longitude ->
+                    LatLng(latitude,
+                        longitude)
+                }
+            }
+            position?.let {
                 googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, ZOOM_LEVEL))
             }
         }

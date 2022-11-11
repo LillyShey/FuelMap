@@ -2,13 +2,11 @@ package com.hpk.data.di
 
 import android.content.Context
 import android.location.LocationManager
-import android.util.Log
 import com.google.android.gms.location.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.hpk.data.BuildConfig
 import com.hpk.data.api.RestConst
-import com.hpk.data.api.authentificator.RefreshAuthenticator
 import com.hpk.data.providers.*
 import com.hpk.data.repositories.*
 import com.hpk.data.services.*
@@ -28,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 private val repositoriesModule = module {
     single<FuelTypeRepositoryImpl>() bind FuelTypeRepository::class
     single<LocationRepositoryImpl>() bind LocationRepository::class
+    single<StationRepositoryImpl>() bind StationRepository::class
     single<AuthRepositoryImpl>() bind AuthRepository::class
 
 }
@@ -47,9 +46,8 @@ private val locationModule = module {
     }
 }
 private val apiServicesModule = module {
-    single<FuelTypeService> {
-        (get() as Retrofit).create(FuelTypeService::class.java)
-    }
+    single<FuelTypeService> { (get() as Retrofit).create(FuelTypeService::class.java) }
+    single<StationService> { (get() as Retrofit).create(StationService::class.java) }
     single<AuthService> {
         (get() as Retrofit).create(AuthService::class.java)
     }

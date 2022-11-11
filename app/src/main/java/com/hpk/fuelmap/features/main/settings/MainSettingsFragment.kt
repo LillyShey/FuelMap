@@ -23,17 +23,22 @@ class MainSettingsFragment : BaseFragment(R.layout.fragment_main_settings) {
     }
 
     private fun initViews() {
-        binding.fuelTypesRecycler.layoutManager = LinearLayoutManager(context)
-        listAdapter.onIsSwitcherChecked = { fuelType ->
-            viewModel.saveFuelTypeState(fuelType)
+        binding.fuelTypesRecycler.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        listAdapter.onCheckedChanged = { fuelType, isChecked ->
+            viewModel.saveFuelTypeState(fuelType, isChecked)
         }
         binding.fuelTypesRecycler.adapter = listAdapter
-        viewModel.getAllFuelsTypes()
     }
 
     private fun observeFuelTypes() {
         viewModel.fuelTypes.observe(viewLifecycleOwner) { fuelTypeList ->
-            listAdapter.fuelTypesList = fuelTypeList
+            if (fuelTypeList.isNullOrEmpty()) {
+                binding.emptyStateTextView.visibility = View.VISIBLE
+            } else {
+                listAdapter.fuelTypesList = fuelTypeList
+                binding.emptyStateTextView.visibility = View.GONE
+            }
         }
     }
 }
