@@ -17,10 +17,11 @@ import com.hpk.fuelmap.common.extensions.showPermissionRequiredDialog
 import com.hpk.fuelmap.common.ui.base.BaseFragment
 import com.hpk.fuelmap.features.main.MainVM
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import splitties.toast.UnreliableToastApi
 import splitties.toast.longToast
 import splitties.toast.toast
 
-
+@OptIn(UnreliableToastApi::class)
 class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
     companion object {
         private const val ZOOM_LEVEL = 16.0f
@@ -35,14 +36,13 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initMap()
-        observeData()
         checkLocationPermission()
+        observeData()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.getCurrentLocation()
+        checkLocationPermission()
     }
 
     private fun observeData() {
@@ -59,6 +59,7 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
             ) {
                 granted {
                     isLocationApprove = true
+                    initMap()
                     viewModel.getCurrentLocation()
                 }
                 denied {
@@ -78,9 +79,13 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
         (childFragmentManager.findFragmentById(R.id.google_map) as? SupportMapFragment)?.let { supportMapFragment ->
             supportMapFragment.getMapAsync {
                 with(it) {
-                    googleMap = this
-                    clusterManager =
-                        ClusterManager(requireContext(), googleMap, MarkerManager(googleMap))
+                    this.setDefaultMapStyle(isLocationApprove)
+                    this.setOnCameraIdleListener {
+                        viewModel.setLatLngBounds(it.projection.visibleRegion.latLngBounds)
+                        clusterManager?.cluster()
+                    }
+                    this.clear()
+                    clusterManager = ClusterManager(requireContext(), this, MarkerManager(this))
                     clusterManager?.let { cluster ->
                         cluster.setOnClusterItemClickListener { markerItem ->
                             viewModel.getStationData(markerItem.getId())
@@ -89,14 +94,9 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
                         clusterRender = MarkerClusterRender(requireContext(), this, cluster)
                         cluster.renderer = clusterRender
                     }
-                    this.setDefaultMapStyle(isLocationApprove)
-                    this.setOnCameraIdleListener {
-                        viewModel.setLatLngBounds(it.projection.visibleRegion.latLngBounds)
-                        clusterManager?.cluster()
-                    }
-                    this.clear()
+                    googleMap = this
+
                 }
-                observeData()
             }
         }
     }

@@ -24,7 +24,6 @@ class FuelResponse(
 
     companion object : ModelMapper<Fuel, FuelResponse> {
         override fun mapTo(model: Fuel): FuelResponse {
-
             return FuelResponse(
                 id = model.id,
                 name_with_brand = model.name_with_brand,

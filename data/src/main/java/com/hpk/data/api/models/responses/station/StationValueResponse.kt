@@ -18,7 +18,7 @@ class StationValueResponse(
             return StationValueResponse(
                 company = model.company,
                 workState = model.workState,
-                fuels = model.fuels?.map { FuelResponse.mapTo(it) },
+                fuels = model.fuels?.let { it.map { response -> FuelResponse.mapTo(response) } },
             )
         }
 
@@ -26,8 +26,8 @@ class StationValueResponse(
             return StationValue(
                 company = model.company,
                 workState = model.workState,
-                fuels = model.fuels?.map { FuelResponse.mapToDomain(it) },
-            )
+                fuels = model.fuels?.let { it.map { response -> FuelResponse.mapToDomain(response) } },
+                )
         }
     }
 }

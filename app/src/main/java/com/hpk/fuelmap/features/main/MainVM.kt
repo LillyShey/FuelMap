@@ -7,7 +7,8 @@ import com.hpk.domain.models.common.Coordinates
 import com.hpk.domain.models.fuel.FuelType
 import com.hpk.domain.models.station.Station
 import com.hpk.domain.models.station.StationValue
-import com.hpk.domain.usecases.SaveFuelTypeStateUseCase
+import com.hpk.domain.usecases.auth.AuthIfNeededUseCase
+import com.hpk.domain.usecases.fuel.SaveFuelTypeStateUseCase
 import com.hpk.domain.usecases.base.LocationResultCallbacks
 import com.hpk.domain.usecases.base.ResultCallbacks
 import com.hpk.domain.usecases.fuel.GetAllFuelTypesUseCase
@@ -26,19 +27,19 @@ class MainVM(
     private val saveFuelTypeStateUseCase: SaveFuelTypeStateUseCase,
     private val getAllStationPointsUseCase: GetAllStationPointsUseCase,
     private val getStationDataUseCase: GetStationDataUseCase,
+    private val authIfNeededUseCase: AuthIfNeededUseCase,
 ) : BaseViewModel() {
     val fuelTypes = MutableLiveData<MutableList<FuelType>?>()
     val currentLocation = MutableLiveData<Coordinates?>()
     val noAnyLocationError = SingleLiveEvent<Unit>()
     val stations = MutableLiveData<List<Station>?>()
     val stationData = MutableLiveData<StationValue>()
-    val isFirstLaunch = MutableLiveData<Boolean>()
     private val checkedFuelTypes = MutableLiveData<String?>()
     private val latLngBounds = MutableLiveData<LatLngBounds>()
 
     init {
-        getAllFuelsTypes()
-        isFirstLaunch.value = true
+        println("-----------------------------------------------------------------------------------------------------------------")
+        getCurrentToken()
     }
 
     fun setLatLngBounds(latLngBounds: LatLngBounds) {
@@ -46,11 +47,7 @@ class MainVM(
         getAllStationPoints()
     }
 
-    fun setLaunch(launchState: Boolean) {
-        this.isFirstLaunch.value = launchState
-    }
-
-    private fun getAllFuelsTypes() {
+    fun getAllFuelsTypes() {
         getAllFuelTypesUseCase(
             uiDispatcher = viewModelScope,
             result = ResultCallbacks(
@@ -206,6 +203,31 @@ class MainVM(
                 onConnectionError = {
                     Timber.e(it)
                     onConnectionError { getCheckedFuelsTypes() }
+                },
+                onUnexpectedError = {
+                    Timber.e(it)
+                    errorMessage.value = it.localizedMessage
+                },
+                onLoading = {
+                    isLoading.value = it
+                }
+            )
+        )
+    }
+    private fun getCurrentToken() {
+        authIfNeededUseCase(
+            uiDispatcher = viewModelScope,
+            result = ResultCallbacks(
+                onSuccess = {
+                    println(it)
+                },
+                onError = {
+                    Timber.e(it)
+                    errorMessage.value = it.apiError?.toString()
+                },
+                onConnectionError = {
+                    Timber.e(it)
+                    onConnectionError { getCurrentToken() }
                 },
                 onUnexpectedError = {
                     Timber.e(it)

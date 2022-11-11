@@ -29,6 +29,7 @@ class MainSettingsFragment : BaseFragment(R.layout.fragment_main_settings) {
             viewModel.saveFuelTypeState(fuelType, isChecked)
         }
         binding.fuelTypesRecycler.adapter = listAdapter
+        viewModel.getAllFuelsTypes()
     }
 
     private fun observeFuelTypes() {

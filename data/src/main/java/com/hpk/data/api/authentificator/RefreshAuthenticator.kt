@@ -1,13 +1,12 @@
 package com.hpk.data.api.authentificator
 
-import android.content.Context
 import com.google.gson.Gson
 import com.hpk.data.BuildConfig
 import com.hpk.data.api.RestConst
 import com.hpk.data.api.models.bodies.auth.RefreshTokenBodyData
 import com.hpk.data.api.responses.auth.AccessTokenResponse
 import com.hpk.data.providers.TokenProvider
-import com.hpk.data.services.AuthService
+import com.hpk.data.api.services.AuthService
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient

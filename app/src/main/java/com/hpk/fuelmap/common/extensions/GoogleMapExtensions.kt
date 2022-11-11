@@ -37,7 +37,7 @@ fun GoogleMap.setDefaultMapStyle(
 ) {
     if (isWithMyLocation) {
         isMyLocationEnabled = true
-        uiSettings.isMyLocationButtonEnabled = false
+        uiSettings.isMyLocationButtonEnabled = true
     }
     with(uiSettings) {
         isCompassEnabled = false

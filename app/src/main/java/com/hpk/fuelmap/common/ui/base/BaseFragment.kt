@@ -13,8 +13,10 @@ import com.hpk.fuelmap.common.extensions.showConnectionErrorSnackBar
 import com.hpk.fuelmap.common.ui.error.ErrorItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import splitties.toast.UnreliableToastApi
 import splitties.toast.toast
 
+@OptIn(UnreliableToastApi::class)
 abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
 
     var loadingContainer: View? = null

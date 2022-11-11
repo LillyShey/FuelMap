@@ -38,18 +38,32 @@ class FuelsAdapter(private val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun onBind(item: Fuel) {
-            binding.fuelNameTV.text = context.getString(R.string.fuel_name, item.name)
-
-            binding.fuelBrandTV.text = context.getString(R.string.fuel_brand, item.brand)
-            binding.specialTV.text = context.getString(R.string.fuel_speciality, item.special)
-            if (item.availability == true) {
-                binding.availabilityIV.setBackgroundResource(R.drawable.icon_available)
-            }
-            if (item.availability == false) {
-                binding.availabilityIV.setBackgroundResource(R.drawable.icon_not_available)
-            }
+            binding.fuelNameTV.text = context.getString(R.string.fuel_name, "Невідома")
+            binding.fuelBrandTV.text = context.getString(R.string.fuel_brand, "Невідомий")
+            binding.specialTV.text = context.getString(R.string.fuel_speciality, "Невідомий")
             binding.priceTV.text =
-                context.getString(R.string.fuel_price, (item.price?.let { it/100 }).toString())
+                context.getString(R.string.fuel_price, "0")
+            binding.availabilityIV.setBackgroundResource(R.drawable.icon_not_available)
+
+            item.name?.let {
+                binding.fuelNameTV.text = context.getString(R.string.fuel_name, item.name)
+            }
+            item.brand?.let {
+                binding.fuelBrandTV.text = context.getString(R.string.fuel_brand, item.brand)
+            }
+            item.special?.let {
+                binding.specialTV.text = context.getString(R.string.fuel_speciality, item.special)
+            }
+            item.availability?.let {
+                if (item.availability == true) {
+                    binding.availabilityIV.setBackgroundResource(R.drawable.icon_available)
+                }
+            }
+            item.price?.let {
+                binding.priceTV.text =
+                    context.getString(R.string.fuel_price,
+                        (item.price?.let { it / 100.0 }).toString())
+            }
         }
     }
 }

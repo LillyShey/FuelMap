@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
@@ -19,8 +18,10 @@ import com.hpk.fuelmap.common.extensions.showConnectionErrorSnackBar
 import com.hpk.fuelmap.common.ui.error.ErrorItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import splitties.toast.UnreliableToastApi
 import splitties.toast.toast
 
+@OptIn(UnreliableToastApi::class)
 abstract class BaseActivity(@LayoutRes layoutId: Int) : AppCompatActivity(layoutId) {
     private val authReceiver = AuthReceiver()
 

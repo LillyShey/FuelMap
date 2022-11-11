@@ -1,4 +1,4 @@
-package com.hpk.domain.usecases
+package com.hpk.domain.usecases.auth
 
 import com.hpk.domain.repositories.AuthRepository
 import com.hpk.domain.usecases.base.BaseUseCase
