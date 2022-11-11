@@ -9,7 +9,7 @@ import com.hpk.data.BuildConfig
 import com.hpk.data.api.RestConst
 import com.hpk.data.providers.*
 import com.hpk.data.repositories.*
-import com.hpk.data.services.*
+import com.hpk.data.api.services.*
 import com.hpk.domain.repositories.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -25,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 private val repositoriesModule = module {
     single<FuelTypeRepositoryImpl>() bind FuelTypeRepository::class
     single<LocationRepositoryImpl>() bind LocationRepository::class
+    single<StationRepositoryImpl>() bind StationRepository::class
 }
 private val locationModule = module {
     single {
@@ -43,6 +44,7 @@ private val locationModule = module {
 }
 private val apiServicesModule = module {
     single<FuelTypeService> { (get() as Retrofit).create(FuelTypeService::class.java) }
+    single<StationService> { (get() as Retrofit).create(StationService::class.java) }
 }
 private val networkModule = module {
     factory<Gson> {
@@ -64,7 +66,7 @@ private val networkModule = module {
                 .url(it.request().url)
             builder.header(RestConst.CONTENT_TYPE, RestConst.CONTENT_TYPE_JSON)
             //FIXME Add token flow
-//            builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Njc4NDYxNDgsImV4cCI6MTY2NzkzMjU0OCwicm9sZXMiOlsiUk9MRV9BTk9OWU1PVVMiXSwidXNlcm5hbWUiOiJhbm9ueW1vdXMifQ.GGmSBA4Z2gGlRe7tZWfUMKwaR3AN-_7KUjIsXWp5onDDgsTzT2QwyXbvidiQ6gRSjiHQ2D6CtvANPbAVCIpYIyszKO93hOaZtRPYguFkGdthFMTzls52_RxgSH5bao6ndvCAMQ8YzwQeLMBfk2pBnuZrq6oey4QpnC7Mk2__akSlOdAbzw3xTl6DzUCm4I1gEEwZ6DVN-IIx9ohCKCVwMn2ueeJUZmmm_8YKfr2tf1EyCQhDvPA4UOVYhNScnRSIpnAub-Myrt9JVeFBlpkcpET5dc_GXhbOxPPa969rqA3xcVzVtoQK3BAg74u99OD4MNWkh-e4BAPxSRmQKqDrlA")
+            builder.header(RestConst.HEADER_AUTHORIZATION, "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NjgwNjYyNzEsImV4cCI6MTY2ODE1MjY3MSwicm9sZXMiOlsiUk9MRV9BTk9OWU1PVVMiXSwidXNlcm5hbWUiOiJhbm9ueW1vdXMifQ.b5pkeyk_fPaFnxLe9uJkztnyb44JMgt6rvb5DwpWl6sJtpOXd1wb1Zw2LZSnkXdOV9qZgTZtJ64MTlFWMfo4Mi2FtD0SeMGWukgYFYH5Ld-kt-1ZtMf6c9aq_tL7x01U3llgikWQt0XydkUcjRrJzFAS3XZVRvPx3znsuTgcojaocMstQuqaBbSxe8521_OAX7xECEHj5z_vGDeQy-gR52rYAFBqyypFV0OkWi8OvPZ2Ii5i8F_slNAQuv57asUOkssYuAhB9Zi0v44KOAJI2W6J9ty8ea-PDjh22Qk-eQbZL8NfV9gJ-ErN3fOVlnyrwD7zEqWs8YZ1BWaQghARtw")
             it.proceed(builder.build())
         }
     }
