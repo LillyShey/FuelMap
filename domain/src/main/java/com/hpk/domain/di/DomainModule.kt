@@ -1,6 +1,7 @@
 package com.hpk.domain.di
 
 import com.hpk.domain.usecases.auth.*
+import com.hpk.domain.usecases.device.RegisterDeviceUseCase
 import com.hpk.domain.usecases.fuel.*
 import com.hpk.domain.usecases.location.*
 import com.hpk.domain.usecases.station.*
@@ -14,6 +15,9 @@ private val useCaseModule = module {
     factory<GetCurrentLocationUseCase>()
     factory<GetAllStationPointsUseCase>()
     factory<GetStationDataUseCase>()
+    factory<RegisterDeviceUseCase>()
+    factory<SubscribeOnFuelUpdatesUseCase>()
+    factory<UnsubscribeFromFuelUpdatesUseCase>()
 }
 
 val domainModule = arrayOf(useCaseModule)

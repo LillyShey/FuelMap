@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.hpk.data.BuildConfig
 import com.hpk.data.api.RestConst
 import com.hpk.data.api.models.bodies.auth.RefreshTokenBodyData
-import com.hpk.data.api.responses.auth.AccessTokenResponse
+import com.hpk.data.api.models.responses.auth.AccessTokenResponse
 import com.hpk.data.providers.TokenProvider
 import com.hpk.data.api.services.AuthService
 import kotlinx.coroutines.runBlocking

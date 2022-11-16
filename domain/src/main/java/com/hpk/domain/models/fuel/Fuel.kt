@@ -1,12 +1,13 @@
 package com.hpk.domain.models.fuel
 
 
-data class Fuel (
+data class Fuel(
     val id: String,
     val name_with_brand: String?,
     val name: String?,
     val brand: String?,
-    val special:String?,
+    val special: String?,
     val availability: Boolean?,
-    val price: Int?
+    val price: Int?,
+    val isSubscribed: Boolean? = false,
 )

@@ -1,4 +1,4 @@
-package com.hpk.data.api.responses.auth
+package com.hpk.data.api.models.responses.auth
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

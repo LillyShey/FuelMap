@@ -19,5 +19,6 @@ interface StationService {
     @GET("stations/{station}")
     suspend fun getStationData(
         @Path("station") id: String,
+        @Query("push_notification_token") fcmToken: String
     ): StationValueResponse
 }

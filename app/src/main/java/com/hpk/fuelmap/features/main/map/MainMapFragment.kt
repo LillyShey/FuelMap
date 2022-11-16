@@ -88,7 +88,8 @@ class MainMapFragment : BaseFragment(R.layout.fragment_main_map) {
                     clusterManager = ClusterManager(requireContext(), this, MarkerManager(this))
                     clusterManager?.let { cluster ->
                         cluster.setOnClusterItemClickListener { markerItem ->
-                            viewModel.getStationData(markerItem.getId())
+                            viewModel.getStationData(requireContext(), markerItem.getId())
+                            viewModel.setStation(markerItem.getId())
                             true
                         }
                         clusterRender = MarkerClusterRender(requireContext(), this, cluster)

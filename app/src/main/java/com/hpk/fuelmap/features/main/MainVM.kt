@@ -1,17 +1,25 @@
 package com.hpk.fuelmap.features.main
 
+import android.content.Context
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.firebase.messaging.FirebaseMessaging
+import com.hpk.domain.models.bodies.FCMTokenBody
+import com.hpk.domain.models.bodies.RegisterDeviceBody
 import com.hpk.domain.models.common.Coordinates
 import com.hpk.domain.models.fuel.FuelType
 import com.hpk.domain.models.station.Station
 import com.hpk.domain.models.station.StationValue
 import com.hpk.domain.usecases.auth.AuthIfNeededUseCase
-import com.hpk.domain.usecases.fuel.SaveFuelTypeStateUseCase
 import com.hpk.domain.usecases.base.LocationResultCallbacks
 import com.hpk.domain.usecases.base.ResultCallbacks
+import com.hpk.domain.usecases.device.RegisterDeviceUseCase
 import com.hpk.domain.usecases.fuel.GetAllFuelTypesUseCase
+import com.hpk.domain.usecases.fuel.SaveFuelTypeStateUseCase
+import com.hpk.domain.usecases.fuel.SubscribeOnFuelUpdatesUseCase
+import com.hpk.domain.usecases.fuel.UnsubscribeFromFuelUpdatesUseCase
 import com.hpk.domain.usecases.location.GetCurrentLocationUseCase
 import com.hpk.domain.usecases.station.GetAllStationPointsUseCase
 import com.hpk.domain.usecases.station.GetStationDataUseCase
@@ -28,6 +36,9 @@ class MainVM(
     private val getAllStationPointsUseCase: GetAllStationPointsUseCase,
     private val getStationDataUseCase: GetStationDataUseCase,
     private val authIfNeededUseCase: AuthIfNeededUseCase,
+    private val registerDeviceUseCase: RegisterDeviceUseCase,
+    private val subscribeOnFuelUpdatesUseCase: SubscribeOnFuelUpdatesUseCase,
+    private val unsubscribeFromFuelUpdatesUseCase: UnsubscribeFromFuelUpdatesUseCase,
 ) : BaseViewModel() {
     val fuelTypes = MutableLiveData<MutableList<FuelType>?>()
     val currentLocation = MutableLiveData<Coordinates?>()
@@ -36,15 +47,19 @@ class MainVM(
     val stationData = MutableLiveData<StationValue>()
     private val checkedFuelTypes = MutableLiveData<String?>()
     private val latLngBounds = MutableLiveData<LatLngBounds>()
+    private val station = MutableLiveData<String>()
 
     init {
-        println("-----------------------------------------------------------------------------------------------------------------")
         getCurrentToken()
     }
 
     fun setLatLngBounds(latLngBounds: LatLngBounds) {
         this.latLngBounds.value = latLngBounds
         getAllStationPoints()
+    }
+
+    fun setStation(station: String) {
+        this.station.value = station
     }
 
     fun getAllFuelsTypes() {
@@ -188,32 +203,42 @@ class MainVM(
         )
     }
 
-    fun getStationData(id: String) {
-        getStationDataUseCase(
-            uiDispatcher = viewModelScope,
-            params = GetStationDataUseCase.Params(id = id),
-            result = ResultCallbacks(
-                onSuccess = {
-                    stationData.value = it
-                },
-                onError = {
-                    Timber.e(it)
-                    errorMessage.value = it.apiError?.toString()
-                },
-                onConnectionError = {
-                    Timber.e(it)
-                    onConnectionError { getCheckedFuelsTypes() }
-                },
-                onUnexpectedError = {
-                    Timber.e(it)
-                    errorMessage.value = it.localizedMessage
-                },
-                onLoading = {
-                    isLoading.value = it
-                }
-            )
+    fun getStationData(context: Context, id: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            "device_prefs",
+            Context.MODE_PRIVATE
         )
+        sharedPreferences.getString("pushNotificationToken", null)?.let { token ->
+            getStationDataUseCase(
+                uiDispatcher = viewModelScope,
+                params = GetStationDataUseCase.Params(
+                    id = id,
+                    fcmToken = token
+                ),
+                result = ResultCallbacks(
+                    onSuccess = {
+                        stationData.value = it
+                    },
+                    onError = {
+                        Timber.e(it)
+                        errorMessage.value = it.apiError?.toString()
+                    },
+                    onConnectionError = {
+                        Timber.e(it)
+                        onConnectionError { getCheckedFuelsTypes() }
+                    },
+                    onUnexpectedError = {
+                        Timber.e(it)
+                        errorMessage.value = it.localizedMessage
+                    },
+                    onLoading = {
+                        isLoading.value = it
+                    }
+                )
+            )
+        }
     }
+
     private fun getCurrentToken() {
         authIfNeededUseCase(
             uiDispatcher = viewModelScope,
@@ -238,5 +263,108 @@ class MainVM(
                 }
             )
         )
+    }
+
+    fun registerDevice() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful && task.result != null) {
+                registerDeviceUseCase(
+                    uiDispatcher = viewModelScope,
+                    params = RegisterDeviceUseCase.Params(
+                        body = RegisterDeviceBody(
+                            pushNotificationToken = task.result ?: " ",
+                            androidVersion = Build.VERSION.RELEASE.toString(),
+                            vendor = Build.MANUFACTURER
+                        )
+                    ),
+                    result = ResultCallbacks(
+                        onLoading = {
+                            isLoading.value = it
+                        },
+                        onError = {
+                            com.github.ajalt.timberkt.Timber.e(it)
+                            errorMessage.value = it.apiError?.toString()
+                        },
+                        onUnexpectedError = {
+                            com.github.ajalt.timberkt.Timber.e(it)
+                            errorMessage.value = it.localizedMessage
+                        }
+                    )
+                )
+            }
+
+        }
+    }
+
+    fun subscribeOnFuelUpdates(context: Context, fuelId: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            "device_prefs",
+            Context.MODE_PRIVATE
+        )
+        sharedPreferences.getString("pushNotificationToken", null)?.let { token ->
+            subscribeOnFuelUpdatesUseCase(
+                uiDispatcher = viewModelScope,
+                params = SubscribeOnFuelUpdatesUseCase.Params(
+                    fuel = fuelId,
+                    fcmTokenBody = FCMTokenBody(
+                        pushNotificationToken = token
+                    )
+                ),
+                result = ResultCallbacks(
+                    onSuccess = {
+                        this.station.value?.let { stationId ->
+                            getStationData(context, stationId)
+                        }
+                    },
+                    onLoading = {
+                        isLoading.value = it
+                    },
+                    onError = {
+                        Timber.e(it)
+                        errorMessage.value = it.apiError?.toString()
+                    },
+                    onUnexpectedError = {
+                        Timber.e(it)
+                        errorMessage.value = it.localizedMessage
+                    }
+                )
+            )
+        }
+    }
+
+    fun unsubscribeFromFuelUpdates(context: Context, fuelId: String) {
+        val sharedPreferences = context.getSharedPreferences(
+            "device_prefs",
+            Context.MODE_PRIVATE
+        )
+        sharedPreferences.getString("pushNotificationToken", null)?.let { token ->
+            unsubscribeFromFuelUpdatesUseCase(
+                uiDispatcher = viewModelScope,
+                params = UnsubscribeFromFuelUpdatesUseCase.Params(
+                    fuel = fuelId,
+                    fcmTokenBody = FCMTokenBody(
+                        pushNotificationToken = token
+                    )
+                ),
+                result = ResultCallbacks(
+                    onSuccess = {
+                        this.station.value?.let { stationId ->
+                            getStationData(context, stationId)
+                        }
+                    },
+                    onLoading = {
+                        isLoading.value = it
+                    },
+                    onError = {
+                        Timber.e(it)
+                        errorMessage.value = it.apiError?.toString()
+                    },
+                    onUnexpectedError = {
+                        Timber.e(it)
+                        errorMessage.value = it.localizedMessage
+                    }
+                )
+            )
+        }
     }
 }

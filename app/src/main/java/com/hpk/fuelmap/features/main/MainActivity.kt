@@ -1,5 +1,7 @@
 package com.hpk.fuelmap.features.main
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.TextView
 import androidx.navigation.findNavController
@@ -18,10 +20,15 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
     private val viewModel: MainVM by viewModel()
     private val adapter = FuelsAdapter(this)
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences =
+            applicationContext.getSharedPreferences("launch", Context.MODE_PRIVATE)
         initViews()
+        checkLaunch()
+        observeStationData()
         observeConnectionError(viewModel.connectionError, binding.root) {
             viewModel.retry()
         }
@@ -34,6 +41,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         navController = findNavController(R.id.mainNavHostFragment)
         NavigationUI.setupWithNavController(binding.mainBottomNavView, navController)
         initBottomSheet()
+
     }
 
     private fun initBottomSheet() {
@@ -50,7 +58,33 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                 adapter.fuelsList = stationData.fuels
                 it.adapter = adapter
             }
+            adapter.onSubscribeClick = { fuel ->
+                if (fuel.isSubscribed == true) {
+                    viewModel.unsubscribeFromFuelUpdates(this, fuel.id)
+                } else {
+                    viewModel.subscribeOnFuelUpdates(this, fuel.id)
+                }
+                dialog.cancel()
+            }
             dialog.show()
         }
+    }
+
+    private fun observeStationData() {
+        viewModel.stationData.observe(this) {
+            adapter.fuelsList = it.fuels
+        }
+    }
+
+    private fun checkLaunch() {
+        val isFirstStart = sharedPreferences.getBoolean(FIRST_LAUNCH, true)
+        if (isFirstStart) {
+            viewModel.registerDevice()
+        }
+        sharedPreferences.edit().putBoolean(FIRST_LAUNCH, false).apply()
+    }
+
+    companion object {
+        const val FIRST_LAUNCH = "first_launch"
     }
 }

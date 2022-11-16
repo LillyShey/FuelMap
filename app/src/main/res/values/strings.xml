@@ -2,24 +2,27 @@
     <string name="app_name">Фюл ⛽ Меп</string>
     <string name="map">Карта</string>
     <string name="settings">Налаштування</string>
-
-
     <string name="all_retry">Retry</string>
-    <string name="all_loading">Loading data…</string>
-    <string name="error_server_api">Whoops, looks like something went wrong</string>
-    <string name="permission_required_title">For the application to work correctly, we need more permission</string>
-    <string name="permission_required_ok">Settings</string>
+    <string name="all_loading">Завантаження…</string>
+    <string name="error_server_api">Упс, схоже, що щось пішло не так</string>
+    <string name="permission_required_title">Для коректної роботи додатку нам потрібно більше дозволів</string>
+    <string name="permission_required_ok">Налаштування</string>
     <string name="settings_card_title">Оберіть тип пального для відображення на карті</string>
     <string name="list_is_empty">Список пустий</string>
-    <string name="permission_permanently_denied_location">Denied your location permission</string>
-    <string name="permission_permanently_denied_location_message">To select your location, we need permission to use the your GPS. Go to settings for permissions.</string>
-    <string name="permission_required_location_message">For correct operation application  we need permission to obtain a location</string>
-    <string name="all_no_location_providers">Location detection is disabled. Please enable it in the settings</string>
-    <string name="company_text">Company name</string>
+    <string name="permission_permanently_denied_location">Відхилено дозвіл на отримання міся знаходження</string>
+    <string name="permission_permanently_denied_location_message">Для отримання вашого місця знаходження нам потрібен доступ до GPS. Надайте його в налаштуваннях.</string>
+    <string name="permission_required_location_message">Для правильної роботи додатку нам потрібен дозвіл на отримання вашого місця знаходження</string>
+    <string name="all_no_location_providers">Отримання місця знаходження вимкнене. будь ласка, ввімкніть його в налаштуваннях</string>
+    <string name="company_text">Назва компанії</string>
     <string name="work_state">Стан станції: </string>
     <string name="fuel_name">Назва: %s</string>
     <string name="fuel_brand">Бренд: %s</string>
     <string name="fuel_speciality">Спосіб оплати: %s</string>
     <string name="fuel_price">%s грн/л</string>
+    <string name="subscribe_button">Підписатись</string>
+    <string name="unsubscribe_button">Відписатись</string>
+    <string name="availability">Доступність</string>
+    <string name="permission_permanently_denied_notification_message">Для надсилання повідомлень нам потрібен доступ до сповіщень. Надайте його в налаштуваннях.</string>
+    <string name="permission_required_notification_message">Для правильної роботи додатку нам потрібен дозвіл на надсилання сповіщень</string>
 
 </resources>

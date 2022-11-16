@@ -56,5 +56,8 @@ versions.dexterVersion = "6.2.3"
 versions.googlePlayServicesMapsVersion = "18.1.0"
 versions.googlePlayServicesLocationVersion = "21.0.0"
 versions.mapUtilsVersion = "2.3.0"
+versions.firebaseMessagingKtxVersion = "23.1.0"
+versions.googleServicesPlugin = "4.3.13"
+versions.firebaseBomVersion = '31.0.2'
 ext.versions = versions
 //endregion ---------------------------------------------------------

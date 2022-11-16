@@ -2,7 +2,7 @@ package com.hpk.data.providers
 
 import android.content.Context
 import com.google.gson.Gson
-import com.hpk.data.api.responses.auth.AccessTokenResponse
+import com.hpk.data.api.models.responses.auth.AccessTokenResponse
 
 class TokenProvider(
     private val gson: Gson,

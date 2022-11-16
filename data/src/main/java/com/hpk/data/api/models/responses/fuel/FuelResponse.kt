@@ -20,6 +20,8 @@ class FuelResponse(
     val availability: Boolean?,
     @SerializedName("price")
     val price: Int?,
+    @SerializedName("is_subscribed")
+    val isSubscribed: Boolean?,
 ) {
 
     companion object : ModelMapper<Fuel, FuelResponse> {
@@ -32,6 +34,7 @@ class FuelResponse(
                 special = model.special,
                 availability = model.availability,
                 price = model.price,
+                isSubscribed = model.isSubscribed,
             )
         }
 
@@ -44,6 +47,7 @@ class FuelResponse(
                 special = model.special,
                 availability = model.availability,
                 price = model.price,
+                isSubscribed = model.isSubscribed,
             )
         }
     }

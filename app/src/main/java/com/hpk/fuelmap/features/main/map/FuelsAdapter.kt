@@ -18,6 +18,8 @@ class FuelsAdapter(private val context: Context) :
             notifyDataSetChanged()
         }
 
+    var onSubscribeClick: ((Fuel) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FuelsViewHolder {
         val binding = ListItemFuelsBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -28,7 +30,7 @@ class FuelsAdapter(private val context: Context) :
 
     override fun onBindViewHolder(holder: FuelsViewHolder, position: Int) {
         fuelsList?.let {
-            holder.onBind(it[position])
+            holder.onBind(it[position], onSubscribeClick)
         }
     }
 
@@ -37,13 +39,15 @@ class FuelsAdapter(private val context: Context) :
     inner class FuelsViewHolder(private val binding: ListItemFuelsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun onBind(item: Fuel) {
+        fun onBind(item: Fuel, onButtonClick: ((Fuel) -> Unit)?) {
             binding.fuelNameTV.text = context.getString(R.string.fuel_name, "Невідома")
             binding.fuelBrandTV.text = context.getString(R.string.fuel_brand, "Невідомий")
             binding.specialTV.text = context.getString(R.string.fuel_speciality, "Невідомий")
             binding.priceTV.text =
                 context.getString(R.string.fuel_price, "0")
             binding.availabilityIV.setBackgroundResource(R.drawable.icon_not_available)
+            binding.subscribeBtn.setBackgroundResource(R.drawable.subscribe_btn_bg)
+            binding.subscribeBtn.text = context.getString(R.string.subscribe_button)
 
             item.name?.let {
                 binding.fuelNameTV.text = context.getString(R.string.fuel_name, item.name)
@@ -63,6 +67,17 @@ class FuelsAdapter(private val context: Context) :
                 binding.priceTV.text =
                     context.getString(R.string.fuel_price,
                         (item.price?.let { it / 100.0 }).toString())
+            }
+            item.isSubscribed?.let {
+                if (it) {
+                    binding.subscribeBtn.setBackgroundResource(R.drawable.unsubscribe_btn_bg)
+                    binding.subscribeBtn.text = context.getString(R.string.unsubscribe_button)
+                }
+            }
+            binding.subscribeBtn.setOnClickListener {
+                if (it.isPressed) {
+                    onButtonClick?.invoke(item)
+                }
             }
         }
     }

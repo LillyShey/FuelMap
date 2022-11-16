@@ -28,9 +28,9 @@ class StationRepositoryImpl(private val stationService: StationService) : Statio
         }
     }
 
-    override suspend fun getStationData(id: String): StationValue {
+    override suspend fun getStationData(id: String, fcmToken: String): StationValue {
         try {
-            return StationValueResponse.mapToDomain(stationService.getStationData(id))
+            return StationValueResponse.mapToDomain(stationService.getStationData(id, fcmToken))
         } catch (e: Throwable) {
             throw e.mapToApiErrors()
         }

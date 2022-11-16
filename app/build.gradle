@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -87,6 +88,7 @@ android {
 dependencies {
     implementation project(':domain')
     implementation project(':data')
+
     //Android
     implementation "androidx.core:core-ktx:$versions.androidKtxVersion"
     implementation "androidx.appcompat:appcompat:$versions.appCompatVersion"
@@ -119,6 +121,11 @@ dependencies {
     //Google play services
     implementation "com.google.android.gms:play-services-maps:$versions.googlePlayServicesMapsVersion"
     implementation "com.google.maps.android:android-maps-utils:$versions.mapUtilsVersion"
+
+    //Firebase
+    implementation platform("com.google.firebase:firebase-bom:$versions.firebaseBomVersion")
+    implementation "com.google.firebase:firebase-messaging:$versions.firebaseMessagingKtxVersion"
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

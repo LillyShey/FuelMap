@@ -2,11 +2,11 @@ package com.hpk.data.api.services
 
 import com.hpk.data.api.RestConst
 import com.hpk.data.api.models.bodies.auth.RefreshTokenBodyData
-import com.hpk.data.api.responses.auth.AccessTokenResponse
+import com.hpk.data.api.models.responses.auth.AccessTokenResponse
 import retrofit2.Response
 import retrofit2.http.*
 
-interface AuthService {
+    interface AuthService {
 
     @GET("token")
     suspend fun getAnonymousToken(): AccessTokenResponse

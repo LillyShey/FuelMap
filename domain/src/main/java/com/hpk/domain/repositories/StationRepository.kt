@@ -14,5 +14,6 @@ interface StationRepository {
 
     suspend fun getStationData(
         id: String,
+        fcmToken: String
     ): StationValue
 }

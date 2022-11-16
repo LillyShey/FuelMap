@@ -10,11 +10,12 @@ class GetStationDataUseCase(private val stationRepository: StationRepository) :
     BaseUseCase<StationValue, GetStationDataUseCase.Params>() {
     override suspend fun remoteWork(params: Params?): StationValue {
         return withContext(Dispatchers.IO) {
-            stationRepository.getStationData(params!!.id)
+            stationRepository.getStationData(params!!.id, params.fcmToken)
         }
     }
 
     class Params(
         val  id: String,
+        val fcmToken: String
     )
 }
